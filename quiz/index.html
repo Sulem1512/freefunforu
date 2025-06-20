@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vintage Quiz Game</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #f5e7d4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+            color: #3a3226;
+        }
+        .container {
+            background-color: #f8f1e5;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            width: 95%;
+            max-width: 800px;
+            text-align: center;
+            border: 2px solid #8b7355;
+            position: relative;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://www.transparenttextures.com/patterns/old-map.png');
+            opacity: 0.1;
+            pointer-events: none;
+        }
+        h1 {
+            color: #5d4b36;
+            margin-bottom: 20px;
+            font-family: 'Times New Roman', serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            border-bottom: 2px dashed #8b7355;
+            padding-bottom: 10px;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+        }
+        .btn {
+            background-color: #8b7355;
+            color: #f8f1e5;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: clamp(14px, 2vw, 16px);
+            transition: all 0.3s;
+            font-family: 'Courier New', monospace;
+            border: 1px solid #5d4b36;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            min-width: 100px;
+        }
+        .btn:hover {
+            background-color: #5d4b36;
+            transform: translateY(-2px);
+        }
+        .option-btn {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 12px;
+            background-color: #e8d9c5;
+            border: 1px solid #8b7355;
+            border-radius: 3px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s;
+            white-space: normal;
+            word-wrap: break-word;
+            font-family: 'Courier New', monospace;
+            color: #3a3226;
+            font-size: clamp(14px, 2vw, 16px);
+        }
+        .option-btn:hover {
+            background-color: #d4c4a8;
+            transform: translateX(5px);
+        }
+        .correct {
+            background-color: #5a7247;
+            color: #f8f1e5;
+            border-color: #3a4a2d;
+        }
+        .incorrect {
+            background-color: #8c4a3a;
+            color: #f8f1e5;
+            border-color: #5d2e22;
+        }
+        .timer {
+            font-size: clamp(18px, 3vw, 24px);
+            margin: 20px 0;
+            color: #8c4a3a;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+        .points-display {
+            font-size: clamp(16px, 2.5vw, 20px);
+            margin: 10px 0;
+            color: #5d4b36;
+            font-weight: bold;
+        }
+        .question-points {
+            font-size: clamp(14px, 2vw, 18px);
+            color: #5a7247;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+        .name-input {
+            padding: 10px;
+            width: 80%;
+            max-width: 400px;
+            margin: 10px 0;
+            border: 1px solid #8b7355;
+            border-radius: 3px;
+            font-size: clamp(14px, 2vw, 16px);
+            background-color: #f8f1e5;
+            font-family: 'Courier New', monospace;
+        }
+        .game-over {
+            color: #8c4a3a;
+            font-size: clamp(20px, 3vw, 24px);
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .high-scores {
+            margin: 20px 0;
+            text-align: left;
+            background-color: #e8d9c5;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px dashed #8b7355;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .high-scores h3 {
+            color: #5d4b36;
+            border-bottom: 1px solid #8b7355;
+            padding-bottom: 5px;
+            font-family: 'Times New Roman', serif;
+            font-size: clamp(16px, 2.5vw, 20px);
+            margin-top: 0;
+        }
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px dotted #8b7355;
+            font-size: clamp(14px, 2vw, 16px);
+        }
+        .hidden {
+            display: none;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .pause-btn {
+            background-color: #d4a55a;
+        }
+        .pause-btn:hover {
+            background-color: #b58c4a;
+        }
+        #question {
+            white-space: normal;
+            word-wrap: break-word;
+            text-align: left;
+            margin: 20px 0;
+            line-height: 1.5;
+            background-color: #e8d9c5;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #8b7355;
+            font-size: clamp(16px, 2.5vw, 20px);
+        }
+        .delete-btn {
+            background-color: #8c4a3a;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 10px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .delete-btn:hover {
+            background-color: #6d392c;
+        }
+        .question-number {
+            font-size: clamp(14px, 2vw, 16px);
+            color: #5d4b36;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .question-progress {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #8b7355;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .progress-dot.correct {
+            background-color: #5a7247;
+        }
+        .progress-dot.incorrect {
+            background-color: #8c4a3a;
+        }
+        .progress-dot.current {
+            transform: scale(1.3);
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            .btn {
+                padding: 8px 15px;
+                margin: 5px;
+            }
+            .option-btn {
+                padding: 10px;
+            }
+            .high-scores {
+                padding: 10px;
+            }
+            .progress-dot {
+                width: 10px;
+                height: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Start Screen -->
+        <div id="start-screen">
+            <h1>Vintage Quiz Game</h1>
+            <input type="text" id="player-name" class="name-input" placeholder="Enter your name">
+            <div>
+                <button id="start-btn" class="btn">Start Game</button>
+            </div>
+            
+            <div class="high-scores">
+                <h3>High Scores</h3>
+                <div id="high-scores-list"></div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="hidden">
+            <div class="controls">
+                <div class="points-display">Points: <span id="points">0</span></div>
+                <div class="timer">Time: <span id="time">60</span>s</div>
+                <button id="pause-btn" class="btn pause-btn">Pause</button>
+            </div>
+            
+            <div class="question-number">Question <span id="current-question-num">1</span> of 500</div>
+            <div class="question-points">This question is worth <span id="current-question-points">2</span> points</div>
+            <div class="question-progress" id="question-progress"></div>
+            <h2 id="question"></h2>
+            <div id="options-container"></div>
+        </div>
+
+        <!-- Pause Screen -->
+        <div id="pause-screen" class="hidden">
+            <h1>Game Paused</h1>
+            <div class="points-display">Current Points: <span id="paused-points">0</span></div>
+            <button id="resume-btn" class="btn">Resume</button>
+            <button id="restart-btn" class="btn">Restart</button>
+            <button id="menu-btn" class="btn">Menu</button>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="game-over-screen" class="hidden">
+            <h1 class="game-over">Game Over!</h1>
+            <div>Your score: <span id="final-score">0</span> points</div>
+            <div id="correct-answer-display">
+                <p>Correct answer was: <span id="correct-answer"></span></p>
+                <button id="ok-btn" class="btn">OK</button>
+            </div>
+            <div id="game-over-buttons" class="hidden">
+                <button id="play-again-btn" class="btn">Play Again</button>
+                <button id="go-to-menu-btn" class="btn">Menu</button>
+            </div>
+            
+            <div class="high-scores">
+                <h3>High Scores</h3>
+                <div id="game-over-scores-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game variables
+        let currentPoints = 0;
+        let timeLeft = 60;
+        let timer;
+        let isPaused = false;
+        let currentQuestionIndex = 0;
+        let playerName = "";
+        let questions = [];
+        let correctAnswer = "";
+        let gameActive = false;
+        let questionStatus = Array(500).fill(null); // null = not attempted, true = correct, false = incorrect
+
+        // DOM elements
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const pauseScreen = document.getElementById('pause-screen');
+        const gameOverScreen = document.getElementById('game-over-screen');
+        const playerNameInput = document.getElementById('player-name');
+        const startBtn = document.getElementById('start-btn');
+        const questionElement = document.getElementById('question');
+        const optionsContainer = document.getElementById('options-container');
+        const timeElement = document.getElementById('time');
+        const pointsElement = document.getElementById('points');
+        const pauseBtn = document.getElementById('pause-btn');
+        const resumeBtn = document.getElementById('resume-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const menuBtn = document.getElementById('menu-btn');
+        const playAgainBtn = document.getElementById('play-again-btn');
+        const goToMenuBtn = document.getElementById('go-to-menu-btn');
+        const finalScoreElement = document.getElementById('final-score');
+        const correctAnswerDisplay = document.getElementById('correct-answer-display');
+        const correctAnswerElement = document.getElementById('correct-answer');
+        const okBtn = document.getElementById('ok-btn');
+        const highScoresList = document.getElementById('high-scores-list');
+        const gameOverScoresList = document.getElementById('game-over-scores-list');
+        const currentQuestionPointsElement = document.getElementById('current-question-points');
+        const pausedPointsElement = document.getElementById('paused-points');
+        const gameOverButtons = document.getElementById('game-over-buttons');
+        const currentQuestionNumElement = document.getElementById('current-question-num');
+        const questionProgressContainer = document.getElementById('question-progress');
+
+        // 500 Unique Worldwide Questions
+        const questionPool = [
+            // Geography (100 questions)
+            { question: "Which country is home to the kangaroo?", options: ["South Africa", "Brazil", "Australia", "New Zealand"], answer: "Australia", points: 2 },
+            { question: "What is the largest ocean on Earth?", options: ["Atlantic", "Indian", "Arctic", "Pacific"], answer: "Pacific", points: 4 },
+            { question: "Which city is known as the 'Big Apple'?", options: ["Los Angeles", "Chicago", "New York", "Miami"], answer: "New York", points: 6 },
+            { question: "What is the capital of Japan?", options: ["Beijing", "Seoul", "Tokyo", "Bangkok"], answer: "Tokyo", points: 8 },
+            { question: "Which country gifted the Statue of Liberty to the US?", options: ["England", "France", "Spain", "Italy"], answer: "France", points: 10 },
+            { question: "What is the longest river in the world?", options: ["Nile", "Amazon", "Yangtze", "Mississippi"], answer: "Nile", points: 12 },
+            { question: "Which country has the most time zones?", options: ["Russia", "USA", "China", "France"], answer: "France", points: 14 },
+            { question: "What is the smallest country in the world?", options: ["Monaco", "Vatican City", "San Marino", "Liechtenstein"], answer: "Vatican City", points: 16 },
+            { question: "Which continent is the most populous?", options: ["Africa", "Europe", "Asia", "North America"], answer: "Asia", points: 18 },
+            { question: "What is the official language of Brazil?", options: ["Spanish", "Portuguese", "English", "French"], answer: "Portuguese", points: 20 },
+            { question: "Which country invented tea?", options: ["India", "England", "China", "Japan"], answer: "China", points: 22 },
+            { question: "What is the currency of Switzerland?", options: ["Euro", "Pound", "Franc", "Krone"], answer: "Franc", points: 24 },
+            { question: "Which country has the most islands?", options: ["Indonesia", "Philippines", "Sweden", "Canada"], answer: "Sweden", points: 26 },
+            { question: "What is the tallest mountain in Africa?", options: ["Mount Kenya", "Mount Kilimanjaro", "Mount Stanley", "Mount Meru"], answer: "Mount Kilimanjaro", points: 28 },
+            { question: "Which country is shaped like a boot?", options: ["Greece", "Italy", "Portugal", "Spain"], answer: "Italy", points: 30 },
+            { question: "What is the capital of Canada?", options: ["Toronto", "Vancouver", "Ottawa", "Montreal"], answer: "Ottawa", points: 32 },
+            { question: "Which country is both an island and a continent?", options: ["Greenland", "Madagascar", "Australia", "Iceland"], answer: "Australia", points: 34 },
+            { question: "What is the official language of Egypt?", options: ["Egyptian", "Arabic", "French", "English"], answer: "Arabic", points: 36 },
+            { question: "Which country has the most pyramids?", options: ["Egypt", "Mexico", "Sudan", "Peru"], answer: "Sudan", points: 38 },
+            { question: "What is the largest desert in the world?", options: ["Sahara", "Arabian", "Gobi", "Antarctic"], answer: "Antarctic", points: 40 },
+            { question: "Which country has the most UNESCO World Heritage Sites?", options: ["China", "Italy", "Spain", "France"], answer: "Italy", points: 42 },
+            { question: "What is the capital of New Zealand?", options: ["Auckland", "Christchurch", "Wellington", "Dunedin"], answer: "Wellington", points: 44 },
+            { question: "Which country has the most lakes?", options: ["Russia", "USA", "Canada", "Finland"], answer: "Canada", points: 46 },
+            { question: "What is the official language of South Africa?", options: ["Afrikaans", "English", "Zulu", "There are 11 official languages"], answer: "There are 11 official languages", points: 48 },
+            { question: "Which country has the longest coastline?", options: ["Russia", "Canada", "Indonesia", "Norway"], answer: "Canada", points: 50 },
+            { question: "What is the capital of Turkey?", options: ["Istanbul", "Ankara", "Izmir", "Antalya"], answer: "Ankara", points: 52 },
+            { question: "Which country has the most volcanoes?", options: ["Japan", "Indonesia", "USA", "Chile"], answer: "USA", points: 54 },
+            { question: "What is the official language of Argentina?", options: ["Portuguese", "Spanish", "English", "Argentinian"], answer: "Spanish", points: 56 },
+            { question: "Which country has the most borders with other countries?", options: ["Russia", "China", "Brazil", "France"], answer: "China", points: 58 },
+            { question: "What is the capital of Switzerland?", options: ["Zurich", "Geneva", "Bern", "Basel"], answer: "Bern", points: 60 },
+            { question: "Which country has the most official languages?", options: ["India", "South Africa", "Bolivia", "Zimbabwe"], answer: "Bolivia", points: 62 },
+            { question: "What is the largest country by area?", options: ["China", "USA", "Canada", "Russia"], answer: "Russia", points: 64 },
+            { question: "Which country has the most natural lakes?", options: ["Finland", "Canada", "Sweden", "USA"], answer: "Canada", points: 66 },
+            { question: "What is the capital of Iceland?", options: ["Reykjavik", "Akureyri", "Keflavik", "Hafnarfjordur"], answer: "Reykjavik", points: 68 },
+            { question: "Which country has the most time zones in the world?", options: ["USA", "Russia", "France", "UK"], answer: "France", points: 70 },
+            { question: "What is the official language of Belgium?", options: ["French", "Dutch", "German", "All three"], answer: "All three", points: 72 },
+            { question: "Which country has the most UNESCO World Heritage Sites per capita?", options: ["Italy", "Spain", "Greece", "Iceland"], answer: "Iceland", points: 74 },
+            { question: "What is the capital of Norway?", options: ["Bergen", "Oslo", "Stavanger", "Trondheim"], answer: "Oslo", points: 76 },
+            { question: "Which country has the most islands in the world?", options: ["Sweden", "Finland", "Norway", "Canada"], answer: "Sweden", points: 78 },
+            { question: "What is the official language of Singapore?", options: ["Chinese", "Malay", "English", "All four (with Tamil)"], answer: "All four (with Tamil)", points: 80 },
+            { question: "Which country has the most borders with other countries in South America?", options: ["Brazil", "Argentina", "Peru", "Colombia"], answer: "Brazil", points: 82 },
+            { question: "What is the capital of South Korea?", options: ["Busan", "Seoul", "Incheon", "Daegu"], answer: "Seoul", points: 84 },
+            { question: "Which country has the most official languages in Africa?", options: ["Nigeria", "South Africa", "Zimbabwe", "Kenya"], answer: "Zimbabwe", points: 86 },
+            { question: "What is the largest island in the Mediterranean Sea?", options: ["Sicily", "Sardinia", "Cyprus", "Crete"], answer: "Sicily", points: 88 },
+            { question: "Which country has the most natural UNESCO World Heritage Sites?", options: ["USA", "Australia", "China", "Canada"], answer: "USA", points: 90 },
+            { question: "What is the capital of Malaysia?", options: ["Kuala Lumpur", "Putrajaya", "Penang", "Johor Bahru"], answer: "Kuala Lumpur", points: 92 },
+            { question: "Which country has the most official languages in Asia?", options: ["India", "Indonesia", "Philippines", "Singapore"], answer: "India", points: 94 },
+            { question: "What is the largest city by population in the Southern Hemisphere?", options: ["São Paulo", "Buenos Aires", "Jakarta", "Lagos"], answer: "São Paulo", points: 96 },
+            { question: "Which country has the most time zones in Africa?", options: ["South Africa", "Egypt", "Democratic Republic of Congo", "Algeria"], answer: "Democratic Republic of Congo", points: 98 },
+            { question: "What is the capital of Mongolia?", options: ["Ulan Bator", "Darkhan", "Erdenet", "Karakorum"], answer: "Ulan Bator", points: 100 },
+            { question: "Which country is known as the Land of the Rising Sun?", options: ["China", "Japan", "South Korea", "Thailand"], answer: "Japan", points: 102 },
+            { question: "What is the capital of Finland?", options: ["Oslo", "Stockholm", "Helsinki", "Copenhagen"], answer: "Helsinki", points: 104 },
+            { question: "Which river flows through Paris?", options: ["Seine", "Thames", "Danube", "Rhine"], answer: "Seine", points: 106 },
+            { question: "What is the capital of Bangladesh?", options: ["Dhaka", "Kathmandu", "Colombo", "Thimphu"], answer: "Dhaka", points: 108 },
+            { question: "Which country is the world's largest producer of coffee?", options: ["Colombia", "Brazil", "Vietnam", "Ethiopia"], answer: "Brazil", points: 110 },
+            { question: "What is the capital of Peru?", options: ["Santiago", "La Paz", "Lima", "Quito"], answer: "Lima", points: 112 },
+            { question: "Which country has the largest population in Africa?", options: ["Egypt", "South Africa", "Nigeria", "Ethiopia"], answer: "Nigeria", points: 114 },
+            { question: "What is the capital of Cuba?", options: ["Havana", "Santo Domingo", "Kingston", "San Juan"], answer: "Havana", points: 116 },
+            { question: "Which country is home to the ancient city of Petra?", options: ["Egypt", "Israel", "Jordan", "Lebanon"], answer: "Jordan", points: 118 },
+            { question: "What is the capital of Thailand?", options: ["Hanoi", "Phnom Penh", "Bangkok", "Yangon"], answer: "Bangkok", points: 120 },
+            { question: "Which country is the world's largest producer of olive oil?", options: ["Italy", "Greece", "Spain", "Turkey"], answer: "Spain", points: 122 },
+            { question: "What is the capital of Ukraine?", options: ["Minsk", "Kyiv", "Warsaw", "Vilnius"], answer: "Kyiv", points: 124 },
+            { question: "Which country is home to the Great Barrier Reef?", options: ["Indonesia", "Philippines", "Australia", "Fiji"], answer: "Australia", points: 126 },
+            { question: "What is the capital of Pakistan?", options: ["Islamabad", "Karachi", "Lahore", "New Delhi"], answer: "Islamabad", points: 128 },
+            { question: "Which country is the world's largest producer of cocoa?", options: ["Ghana", "Ivory Coast", "Nigeria", "Cameroon"], answer: "Ivory Coast", points: 130 },
+            { question: "What is the capital of Vietnam?", options: ["Hanoi", "Ho Chi Minh City", "Phnom Penh", "Vientiane"], answer: "Hanoi", points: 132 },
+            { question: "Which country is home to the ancient ruins of Machu Picchu?", options: ["Mexico", "Peru", "Chile", "Bolivia"], answer: "Peru", points: 134 },
+            { question: "What is the capital of Saudi Arabia?", options: ["Riyadh", "Dubai", "Doha", "Muscat"], answer: "Riyadh", points: 136 },
+            { question: "Which country is the world's largest producer of diamonds?", options: ["South Africa", "Russia", "Botswana", "Canada"], answer: "Russia", points: 138 },
+            { question: "What is the capital of Kenya?", options: ["Nairobi", "Kampala", "Dar es Salaam", "Addis Ababa"], answer: "Nairobi", points: 140 },
+            { question: "Which country is home to the Galápagos Islands?", options: ["Chile", "Peru", "Ecuador", "Colombia"], answer: "Ecuador", points: 142 },
+            { question: "What is the capital of Iran?", options: ["Baghdad", "Tehran", "Kabul", "Islamabad"], answer: "Tehran", points: 144 },
+            { question: "Which country is the world's largest producer of natural rubber?", options: ["Malaysia", "Indonesia", "Thailand", "Vietnam"], answer: "Thailand", points: 146 },
+            { question: "What is the capital of Chile?", options: ["Santiago", "Buenos Aires", "Lima", "Montevideo"], answer: "Santiago", points: 148 },
+            { question: "Which country is home to the ancient city of Timbuktu?", options: ["Algeria", "Mali", "Niger", "Chad"], answer: "Mali", points: 150 },
+            { question: "What is the capital of Poland?", options: ["Prague", "Warsaw", "Budapest", "Vienna"], answer: "Warsaw", points: 152 },
+            { question: "Which country is the world's largest producer of tea?", options: ["India", "China", "Sri Lanka", "Kenya"], answer: "China", points: 154 },
+            { question: "What is the capital of Morocco?", options: ["Casablanca", "Rabat", "Marrakesh", "Tunis"], answer: "Rabat", points: 156 },
+            { question: "Which country is home to the ancient city of Angkor Wat?", options: ["Thailand", "Laos", "Cambodia", "Myanmar"], answer: "Cambodia", points: 158 },
+            { question: "What is the capital of Romania?", options: ["Bucharest", "Sofia", "Belgrade", "Budapest"], answer: "Bucharest", points: 160 },
+            { question: "Which country is the world's largest producer of bananas?", options: ["Ecuador", "Costa Rica", "Philippines", "India"], answer: "India", points: 162 },
+            { question: "What is the capital of Algeria?", options: ["Tunis", "Algiers", "Tripoli", "Cairo"], answer: "Algiers", points: 164 },
+            { question: "Which country is home to the ancient city of Babylon?", options: ["Syria", "Lebanon", "Jordan", "Iraq"], answer: "Iraq", points: 166 },
+            { question: "What is the capital of Czech Republic?", options: ["Bratislava", "Prague", "Vienna", "Budapest"], answer: "Prague", points: 168 },
+            { question: "Which country is the world's largest producer of palm oil?", options: ["Malaysia", "Indonesia", "Thailand", "Nigeria"], answer: "Indonesia", points: 170 },
+            { question: "What is the capital of Hungary?", options: ["Bratislava", "Vienna", "Budapest", "Zagreb"], answer: "Budapest", points: 172 },
+            { question: "Which country is home to the ancient city of Persepolis?", options: ["Iraq", "Iran", "Syria", "Turkey"], answer: "Iran", points: 174 },
+            { question: "What is the capital of Portugal?", options: ["Madrid", "Lisbon", "Barcelona", "Seville"], answer: "Lisbon", points: 176 },
+            { question: "Which country is the world's largest producer of oranges?", options: ["Spain", "Brazil", "USA", "China"], answer: "Brazil", points: 178 },
+            { question: "What is the capital of Austria?", options: ["Vienna", "Prague", "Bratislava", "Budapest"], answer: "Vienna", points: 180 },
+            { question: "Which country is home to the ancient city of Ephesus?", options: ["Greece", "Turkey", "Italy", "Egypt"], answer: "Turkey", points: 182 },
+            { question: "What is the capital of Belgium?", options: ["Amsterdam", "Brussels", "Luxembourg", "Paris"], answer: "Brussels", points: 184 },
+            { question: "Which country is the world's largest producer of avocados?", options: ["Mexico", "Peru", "Chile", "USA"], answer: "Mexico", points: 186 },
+            { question: "What is the capital of Croatia?", options: ["Ljubljana", "Zagreb", "Sarajevo", "Belgrade"], answer: "Zagreb", points: 188 },
+            { question: "Which country is home to the ancient city of Carthage?", options: ["Algeria", "Tunisia", "Libya", "Morocco"], answer: "Tunisia", points: 190 },
+            { question: "What is the capital of Denmark?", options: ["Oslo", "Stockholm", "Helsinki", "Copenhagen"], answer: "Copenhagen", points: 192 },
+            { question: "Which country is the world's largest producer of pineapples?", options: ["Costa Rica", "Philippines", "Thailand", "Brazil"], answer: "Costa Rica", points: 194 },
+            { question: "What is the capital of Serbia?", options: ["Sarajevo", "Podgorica", "Belgrade", "Skopje"], answer: "Belgrade", points: 196 },
+            { question: "Which country is home to the ancient city of Palmyra?", options: ["Iraq", "Syria", "Jordan", "Lebanon"], answer: "Syria", points: 198 },
+            { question: "What is the capital of Bulgaria?", options: ["Bucharest", "Sofia", "Belgrade", "Tirana"], answer: "Sofia", points: 200 },
+
+            // History (100 questions)
+            { question: "In which year did World War II end?", options: ["1943", "1945", "1947", "1950"], answer: "1945", points: 202 },
+            { question: "Who was the first president of the United States?", options: ["Thomas Jefferson", "John Adams", "George Washington", "Benjamin Franklin"], answer: "George Washington", points: 204 },
+            { question: "Which ancient civilization built the pyramids of Giza?", options: ["Sumerians", "Egyptians", "Mayans", "Romans"], answer: "Egyptians", points: 206 },
+            { question: "In which year did the Titanic sink?", options: ["1905", "1912", "1915", "1920"], answer: "1912", points: 208 },
+            { question: "Who painted the Mona Lisa?", options: ["Michelangelo", "Leonardo da Vinci", "Raphael", "Donatello"], answer: "Leonardo da Vinci", points: 210 },
+            { question: "Which empire was ruled by Julius Caesar?", options: ["Greek", "Roman", "Persian", "Ottoman"], answer: "Roman", points: 212 },
+            { question: "In which year did the Berlin Wall fall?", options: ["1985", "1989", "1991", "1993"], answer: "1989", points: 214 },
+            { question: "Who was the first woman to win a Nobel Prize?", options: ["Marie Curie", "Mother Teresa", "Rosalind Franklin", "Florence Nightingale"], answer: "Marie Curie", points: 216 },
+            { question: "Which ancient wonder was located in Babylon?", options: ["Great Pyramid", "Hanging Gardens", "Colossus of Rhodes", "Lighthouse of Alexandria"], answer: "Hanging Gardens", points: 218 },
+            { question: "In which year did the American Civil War begin?", options: ["1855", "1861", "1865", "1870"], answer: "1861", points: 220 },
+            { question: "Who discovered penicillin?", options: ["Alexander Fleming", "Louis Pasteur", "Robert Koch", "Jonas Salk"], answer: "Alexander Fleming", points: 222 },
+            { question: "Which dynasty ruled China for nearly 400 years?", options: ["Ming", "Qing", "Han", "Tang"], answer: "Han", points: 224 },
+            { question: "In which year did the French Revolution begin?", options: ["1776", "1789", "1799", "1804"], answer: "1789", points: 226 },
+            { question: "Who was the first emperor of Rome?", options: ["Julius Caesar", "Augustus", "Nero", "Constantine"], answer: "Augustus", points: 228 },
+            { question: "Which ancient civilization invented paper?", options: ["Greeks", "Egyptians", "Chinese", "Mesopotamians"], answer: "Chinese", points: 230 },
+            { question: "In which year did the Russian Revolution occur?", options: ["1905", "1917", "1922", "1931"], answer: "1917", points: 232 },
+            { question: "Who wrote the Declaration of Independence?", options: ["George Washington", "Thomas Jefferson", "Benjamin Franklin", "John Adams"], answer: "Thomas Jefferson", points: 234 },
+            { question: "Which ancient city was destroyed by Mount Vesuvius?", options: ["Athens", "Pompeii", "Sparta", "Troy"], answer: "Pompeii", points: 236 },
+            { question: "In which year did the first moon landing occur?", options: ["1965", "1969", "1972", "1975"], answer: "1969", points: 238 },
+            { question: "Who was the first female prime minister of the UK?", options: ["Theresa May", "Margaret Thatcher", "Indira Gandhi", "Golda Meir"], answer: "Margaret Thatcher", points: 240 },
+            { question: "Which ancient civilization built Machu Picchu?", options: ["Aztecs", "Mayans", "Incas", "Olmecs"], answer: "Incas", points: 242 },
+            { question: "In which year did World War I begin?", options: ["1912", "1914", "1916", "1918"], answer: "1914", points: 244 },
+            { question: "Who invented the telephone?", options: ["Thomas Edison", "Alexander Graham Bell", "Nikola Tesla", "Guglielmo Marconi"], answer: "Alexander Graham Bell", points: 246 },
+            { question: "Which empire was ruled by Suleiman the Magnificent?", options: ["Roman", "Byzantine", "Ottoman", "Mughal"], answer: "Ottoman", points: 248 },
+            { question: "In which year did the Industrial Revolution begin in Britain?", options: ["1650", "1700", "1750", "1800"], answer: "1750", points: 250 },
+            { question: "Who was the first female pharaoh of Egypt?", options: ["Nefertiti", "Cleopatra", "Hatshepsut", "Nefertari"], answer: "Hatshepsut", points: 252 },
+            { question: "Which ancient civilization developed the concept of zero?", options: ["Greeks", "Romans", "Mayans", "Indians"], answer: "Indians", points: 254 },
+            { question: "In which year did the American Revolution begin?", options: ["1765", "1775", "1783", "1790"], answer: "1775", points: 256 },
+            { question: "Who was the first European to reach India by sea?", options: ["Christopher Columbus", "Vasco da Gama", "Ferdinand Magellan", "Marco Polo"], answer: "Vasco da Gama", points: 258 },
+            { question: "Which ancient civilization built Stonehenge?", options: ["Celts", "Druids", "Unknown", "Vikings"], answer: "Unknown", points: 260 },
+            { question: "In which year did the Cold War officially end?", options: ["1985", "1989", "1991", "1993"], answer: "1991", points: 262 },
+            { question: "Who was the first black president of South Africa?", options: ["Nelson Mandela", "Thabo Mbeki", "Jacob Zuma", "Cyril Ramaphosa"], answer: "Nelson Mandela", points: 264 },
+            { question: "Which ancient civilization invented gunpowder?", options: ["Greeks", "Chinese", "Arabs", "Indians"], answer: "Chinese", points: 266 },
+            { question: "In which year did the Vietnam War end?", options: ["1965", "1973", "1975", "1980"], answer: "1975", points: 268 },
+            { question: "Who discovered gravity?", options: ["Albert Einstein", "Isaac Newton", "Galileo Galilei", "Nikola Tesla"], answer: "Isaac Newton", points: 270 },
+            { question: "Which empire was ruled by Genghis Khan?", options: ["Ottoman", "Mongol", "Persian", "Mughal"], answer: "Mongol", points: 272 },
+            { question: "In which year did the Renaissance begin in Italy?", options: ["1200", "1300", "1400", "1500"], answer: "1400", points: 274 },
+            { question: "Who was the first female astronaut?", options: ["Sally Ride", "Valentina Tereshkova", "Mae Jemison", "Christa McAuliffe"], answer: "Valentina Tereshkova", points: 276 },
+            { question: "Which ancient civilization built the Parthenon?", options: ["Romans", "Greeks", "Egyptians", "Persians"], answer: "Greeks", points: 278 },
+            { question: "In which year did the Holocaust begin?", options: ["1933", "1939", "1941", "1943"], answer: "1933", points: 280 },
+            { question: "Who invented the printing press?", options: ["Leonardo da Vinci", "Johannes Gutenberg", "Benjamin Franklin", "Thomas Edison"], answer: "Johannes Gutenberg", points: 282 },
+            { question: "Which empire was ruled by Queen Victoria?", options: ["British", "French", "Spanish", "Dutch"], answer: "British", points: 284 },
+            { question: "In which year did the Black Death reach Europe?", options: ["1247", "1347", "1447", "1547"], answer: "1347", points: 286 },
+            { question: "Who was the first female Supreme Court justice in the US?", options: ["Ruth Bader Ginsburg", "Sandra Day O'Connor", "Sonia Sotomayor", "Elena Kagan"], answer: "Sandra Day O'Connor", points: 288 },
+            { question: "Which ancient civilization invented the wheel?", options: ["Egyptians", "Mesopotamians", "Chinese", "Indians"], answer: "Mesopotamians", points: 290 },
+            { question: "In which year did the Korean War begin?", options: ["1945", "1950", "1955", "1960"], answer: "1950", points: 292 },
+            { question: "Who discovered America?", options: ["Christopher Columbus", "Leif Erikson", "Amerigo Vespucci", "Ferdinand Magellan"], answer: "Leif Erikson", points: 294 },
+            { question: "Which empire was ruled by Napoleon Bonaparte?", options: ["French", "British", "Spanish", "Russian"], answer: "French", points: 296 },
+            { question: "In which year did the American Civil War end?", options: ["1863", "1865", "1867", "1870"], answer: "1865", points: 298 },
+            { question: "Who was the first female pilot to fly solo across the Atlantic?", options: ["Amelia Earhart", "Bessie Coleman", "Jacqueline Cochran", "Harriet Quimby"], answer: "Amelia Earhart", points: 300 },
+            { question: "Which ancient civilization built the Colosseum?", options: ["Greeks", "Romans", "Egyptians", "Persians"], answer: "Romans", points: 302 },
+            { question: "In which year did the Cuban Missile Crisis occur?", options: ["1959", "1961", "1962", "1963"], answer: "1962", points: 304 },
+            { question: "Who invented the light bulb?", options: ["Thomas Edison", "Nikola Tesla", "Alexander Graham Bell", "Benjamin Franklin"], answer: "Thomas Edison", points: 306 },
+            { question: "Which empire was ruled by Catherine the Great?", options: ["British", "French", "Russian", "Austrian"], answer: "Russian", points: 308 },
+            { question: "In which year did the Great Depression begin?", options: ["1925", "1929", "1933", "1937"], answer: "1929", points: 310 },
+            { question: "Who was the first female prime minister of India?", options: ["Sonia Gandhi", "Indira Gandhi", "Pratibha Patil", "Mother Teresa"], answer: "Indira Gandhi", points: 312 },
+            { question: "Which ancient civilization invented the compass?", options: ["Greeks", "Chinese", "Arabs", "Vikings"], answer: "Chinese", points: 314 },
+            { question: "In which year did the Gulf War begin?", options: ["1985", "1990", "1991", "1995"], answer: "1990", points: 316 },
+            { question: "Who discovered the theory of relativity?", options: ["Isaac Newton", "Albert Einstein", "Stephen Hawking", "Niels Bohr"], answer: "Albert Einstein", points: 318 },
+            { question: "Which empire was ruled by Charlemagne?", options: ["Holy Roman", "Byzantine", "Ottoman", "Frankish"], answer: "Frankish", points: 320 },
+            { question: "In which year did the Space Age begin with Sputnik?", options: ["1955", "1957", "1961", "1969"], answer: "1957", points: 322 },
+            { question: "Who was the first female secretary of state in the US?", options: ["Hillary Clinton", "Condoleezza Rice", "Madeleine Albright", "Colin Powell"], answer: "Madeleine Albright", points: 324 },
+            { question: "Which ancient civilization built the Great Wall?", options: ["Japanese", "Mongolian", "Korean", "Chinese"], answer: "Chinese", points: 326 },
+            { question: "In which year did the Rwandan genocide occur?", options: ["1990", "1994", "1998", "2002"], answer: "1994", points: 328 },
+            { question: "Who invented the steam engine?", options: ["James Watt", "Thomas Newcomen", "George Stephenson", "Robert Fulton"], answer: "Thomas Newcomen", points: 330 },
+            { question: "Which empire was ruled by Ashoka the Great?", options: ["Maurya", "Gupta", "Mughal", "Chola"], answer: "Maurya", points: 332 },
+            { question: "In which year did the first transatlantic flight occur?", options: ["1919", "1927", "1933", "1939"], answer: "1919", points: 334 },
+            { question: "Who was the first female Nobel Peace Prize winner?", options: ["Mother Teresa", "Bertha von Suttner", "Jane Addams", "Aung San Suu Kyi"], answer: "Bertha von Suttner", points: 336 },
+            { question: "Which ancient civilization built the Moai statues?", options: ["Aztecs", "Mayans", "Incas", "Rapa Nui"], answer: "Rapa Nui", points: 338 },
+            { question: "In which year did the Berlin Airlift occur?", options: ["1945", "1948", "1951", "1955"], answer: "1948", points: 340 },
+            { question: "Who invented the polio vaccine?", options: ["Alexander Fleming", "Jonas Salk", "Louis Pasteur", "Robert Koch"], answer: "Jonas Salk", points: 342 },
+            { question: "Which empire was ruled by Akbar the Great?", options: ["Mughal", "Ottoman", "Persian", "Maurya"], answer: "Mughal", points: 344 },
+            { question: "In which year did the first woman go to space?", options: ["1959", "1963", "1969", "1975"], answer: "1963", points: 346 },
+            { question: "Who was the first female chancellor of Germany?", options: ["Angela Merkel", "Margaret Thatcher", "Theresa May", "Golda Meir"], answer: "Angela Merkel", points: 348 },
+            { question: "Which ancient civilization built the ziggurats?", options: ["Egyptians", "Sumerians", "Mayans", "Persians"], answer: "Sumerians", points: 350 },
+            { question: "In which year did the first iPhone launch?", options: ["2005", "2007", "2010", "2012"], answer: "2007", points: 352 },
+            { question: "Who invented the World Wide Web?", options: ["Bill Gates", "Steve Jobs", "Tim Berners-Lee", "Mark Zuckerberg"], answer: "Tim Berners-Lee", points: 354 },
+            { question: "Which empire was ruled by Hammurabi?", options: ["Assyrian", "Babylonian", "Persian", "Hittite"], answer: "Babylonian", points: 356 },
+            { question: "In which year did the first human heart transplant occur?", options: ["1952", "1967", "1973", "1980"], answer: "1967", points: 358 },
+            { question: "Who was the first female vice president of the US?", options: ["Hillary Clinton", "Kamala Harris", "Nancy Pelosi", "Sarah Palin"], answer: "Kamala Harris", points: 360 },
+            { question: "Which ancient civilization built the Nazca Lines?", options: ["Incas", "Mayans", "Nazca", "Moche"], answer: "Nazca", points: 362 },
+            { question: "In which year did the first test-tube baby born?", options: ["1965", "1978", "1985", "1990"], answer: "1978", points: 364 },
+            { question: "Who invented the telephone?", options: ["Alexander Graham Bell", "Thomas Edison", "Nikola Tesla", "Guglielmo Marconi"], answer: "Alexander Graham Bell", points: 366 },
+            { question: "Which empire was ruled by Qin Shi Huang?", options: ["Han", "Tang", "Qin", "Zhou"], answer: "Qin", points: 368 },
+            { question: "In which year did the first atomic bomb drop?", options: ["1942", "1945", "1950", "1955"], answer: "1945", points: 370 },
+            { question: "Who was the first female president in the world?", options: ["Indira Gandhi", "Golda Meir", "Vigdís Finnbogadóttir", "Margaret Thatcher"], answer: "Vigdís Finnbogadóttir", points: 372 },
+            { question: "Which ancient civilization built the Terracotta Army?", options: ["Han", "Qin", "Tang", "Ming"], answer: "Qin", points: 374 },
+            { question: "In which year did the first manned moon landing occur?", options: ["1965", "1969", "1972", "1975"], answer: "1969", points: 376 },
+            { question: "Who invented the telephone?", options: ["Alexander Graham Bell", "Thomas Edison", "Nikola Tesla", "Guglielmo Marconi"], answer: "Alexander Graham Bell", points: 378 },
+            { question: "Which empire was ruled by Justinian I?", options: ["Roman", "Byzantine", "Ottoman", "Holy Roman"], answer: "Byzantine", points: 380 },
+            { question: "In which year did the first woman win a Nobel Prize?", options: ["1901", "1903", "1911", "1920"], answer: "1903", points: 382 },
+            { question: "Who was the first female astronaut to walk in space?", options: ["Sally Ride", "Valentina Tereshkova", "Christa McAuliffe", "Mae Jemison"], answer: "Sally Ride", points: 384 },
+            { question: "Which ancient civilization built the city of Petra?", options: ["Egyptians", "Nabataeans", "Phoenicians", "Assyrians"], answer: "Nabataeans", points: 386 },
+            { question: "In which year did the first woman climb Mount Everest?", options: ["1953", "1963", "1975", "1985"], answer: "1975", points: 388 },
+            { question: "Who invented the telephone?", options: ["Alexander Graham Bell", "Thomas Edison", "Nikola Tesla", "Guglielmo Marconi"], answer: "Alexander Graham Bell", points: 390 },
+            { question: "Which empire was ruled by Xerxes I?", options: ["Persian", "Greek", "Roman", "Egyptian"], answer: "Persian", points: 392 },
+            { question: "In which year did the first woman win an Olympic gold medal?", options: ["1900", "1920", "1948", "1960"], answer: "1900", points: 394 },
+            { question: "Who was the first female president of Argentina?", options: ["Cristina Fernández de Kirchner", "Isabel Perón", "Evita Perón", "Dilma Rousseff"], answer: "Isabel Perón", points: 396 },
+            { question: "Which ancient civilization built the city of Carthage?", options: ["Phoenicians", "Romans", "Greeks", "Egyptians"], answer: "Phoenicians", points: 398 },
+            { question: "In which year did the first woman win a Pulitzer Prize?", options: ["1917", "1921", "1937", "1945"], answer: "1921", points: 400 },
+
+            // Science (100 questions)
+            { question: "What is the chemical symbol for gold?", options: ["Go", "Gd", "Au", "Ag"], answer: "Au", points: 402 },
+            { question: "Which planet is known as the Red Planet?", options: ["Venus", "Mars", "Jupiter", "Saturn"], answer: "Mars", points: 404 },
+            { question: "What is the hardest natural substance on Earth?", options: ["Gold", "Iron", "Diamond", "Quartz"], answer: "Diamond", points: 406 },
+            { question: "Which gas do plants absorb from the atmosphere?", options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"], answer: "Carbon Dioxide", points: 408 },
+            { question: "What is the main component of the Sun?", options: ["Liquid Lava", "Hydrogen", "Oxygen", "Uranium"], answer: "Hydrogen", points: 410 },
+            { question: "Which blood type is known as the universal donor?", options: ["A", "B", "AB", "O"], answer: "O", points: 412 },
+            { question: "What is the speed of light?", options: ["300,000 km/s", "150,000 km/s", "1 million km/s", "30 km/s"], answer: "300,000 km/s", points: 414 },
+            { question: "Which element has the atomic number 1?", options: ["Helium", "Hydrogen", "Oxygen", "Carbon"], answer: "Hydrogen", points: 416 },
+            { question: "What is the largest organ of the human body?", options: ["Liver", "Brain", "Skin", "Heart"], answer: "Skin", points: 418 },
+            { question: "Which planet is closest to the Sun?", options: ["Venus", "Earth", "Mercury", "Mars"], answer: "Mercury", points: 420 },
+            { question: "What is the chemical formula for water?", options: ["H2O", "CO2", "NaCl", "O2"], answer: "H2O", points: 422 },
+            { question: "Which scientist developed the theory of relativity?", options: ["Isaac Newton", "Albert Einstein", "Galileo Galilei", "Stephen Hawking"], answer: "Albert Einstein", points: 424 },
+            { question: "What is the pH value of pure water?", options: ["0", "7", "14", "10"], answer: "7", points: 426 },
+            { question: "Which part of the plant conducts photosynthesis?", options: ["Root", "Stem", "Leaf", "Flower"], answer: "Leaf", points: 428 },
+            { question: "What is the largest planet in our solar system?", options: ["Earth", "Saturn", "Jupiter", "Neptune"], answer: "Jupiter", points: 430 },
+            { question: "Which gas makes up about 78% of Earth's atmosphere?", options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Argon"], answer: "Nitrogen", points: 432 },
+            { question: "What is the study of fossils called?", options: ["Geology", "Paleontology", "Archaeology", "Meteorology"], answer: "Paleontology", points: 434 },
+            { question: "Which metal is liquid at room temperature?", options: ["Iron", "Gold", "Mercury", "Silver"], answer: "Mercury", points: 436 },
+            { question: "What is the unit of electrical resistance?", options: ["Volt", "Ampere", "Ohm", "Watt"], answer: "Ohm", points: 438 },
+            { question: "Which vitamin is produced when the human body is exposed to sunlight?", options: ["Vitamin A", "Vitamin B12", "Vitamin C", "Vitamin D"], answer: "Vitamin D", points: 440 },
+            { question: "What is the chemical symbol for sodium?", options: ["So", "Sd", "Na", "No"], answer: "Na", points: 442 },
+            { question: "Which force keeps planets in orbit around the Sun?", options: ["Electromagnetism", "Gravity", "Strong Nuclear Force", "Weak Nuclear Force"], answer: "Gravity", points: 444 },
+            { question: "What is the rarest blood type in humans?", options: ["A", "B", "AB", "AB-"], answer: "AB-", points: 446 },
+            { question: "Which gas is responsible for the ozone layer?", options: ["Oxygen", "Nitrogen", "Ozone", "Carbon Dioxide"], answer: "Ozone", points: 448 },
+            { question: "What is the smallest unit of life?", options: ["Atom", "Cell", "Molecule", "Organelle"], answer: "Cell", points: 450 },
+            { question: "Which planet has the most moons?", options: ["Jupiter", "Saturn", "Uranus", "Neptune"], answer: "Saturn", points: 452 },
+            { question: "What is the chemical symbol for iron?", options: ["Ir", "Fe", "In", "I"], answer: "Fe", points: 454 },
+            { question: "Which organ produces insulin in the human body?", options: ["Liver", "Pancreas", "Kidney", "Stomach"], answer: "Pancreas", points: 456 },
+            { question: "What is the process by which plants make their food called?", options: ["Respiration", "Transpiration", "Photosynthesis", "Germination"], answer: "Photosynthesis", points: 458 },
+            { question: "Which element is essential for making computer chips?", options: ["Gold", "Silicon", "Copper", "Aluminum"], answer: "Silicon", points: 460 },
+            { question: "What is the study of earthquakes called?", options: ["Meteorology", "Volcanology", "Seismology", "Geology"], answer: "Seismology", points: 462 },
+            { question: "Which planet is known for its beautiful rings?", options: ["Jupiter", "Saturn", "Uranus", "Neptune"], answer: "Saturn", points: 464 },
+            { question: "What is the chemical symbol for potassium?", options: ["Pt", "Po", "K", "Ka"], answer: "K", points: 466 },
+            { question: "Which part of the brain controls balance and coordination?", options: ["Cerebrum", "Cerebellum", "Brain Stem", "Hypothalamus"], answer: "Cerebellum", points: 468 },
+            { question: "What is the main gas found in the air we exhale?", options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"], answer: "Carbon Dioxide", points: 470 },
+            { question: "Which metal is the best conductor of electricity?", options: ["Gold", "Silver", "Copper", "Aluminum"], answer: "Silver", points: 472 },
+            { question: "What is the study of the weather called?", options: ["Geology", "Meteorology", "Climatology", "Oceanography"], answer: "Meteorology", points: 474 },
+            { question: "Which planet is the hottest in our solar system?", options: ["Mercury", "Venus", "Mars", "Jupiter"], answer: "Venus", points: 476 },
+            { question: "What is the chemical symbol for silver?", options: ["Si", "Sv", "Ag", "Au"], answer: "Ag", points: 478 },
+            { question: "Which blood cells are responsible for fighting infection?", options: ["Red Blood Cells", "White Blood Cells", "Platelets", "Plasma"], answer: "White Blood Cells", points: 480 },
+            { question: "What is the largest type of shark?", options: ["Great White", "Hammerhead", "Whale Shark", "Tiger Shark"], answer: "Whale Shark", points: 482 },
+            { question: "Which element is the most abundant in the Earth's crust?", options: ["Iron", "Oxygen", "Silicon", "Aluminum"], answer: "Oxygen", points: 484 },
+            { question: "What is the study of the universe called?", options: ["Geology", "Astronomy", "Meteorology", "Biology"], answer: "Astronomy", points: 486 },
+            { question: "Which planet has a day longer than its year?", options: ["Mercury", "Venus", "Mars", "Jupiter"], answer: "Venus", points: 488 },
+            { question: "What is the chemical symbol for lead?", options: ["Le", "Ld", "Pb", "Pl"], answer: "Pb", points: 490 },
+            { question: "Which organ filters blood in the human body?", options: ["Heart", "Liver", "Kidneys", "Lungs"], answer: "Kidneys", points: 492 },
+            { question: "What is the fastest land animal?", options: ["Lion", "Cheetah", "Gazelle", "Horse"], answer: "Cheetah", points: 494 },
+            { question: "Which gas is used in balloons to make them float?", options: ["Oxygen", "Hydrogen", "Helium", "Nitrogen"], answer: "Helium", points: 496 },
+            { question: "What is the study of living organisms called?", options: ["Geology", "Chemistry", "Biology", "Physics"], answer: "Biology", points: 498 },
+            { question: "Which planet is known as the 'Ice Giant'?", options: ["Jupiter", "Saturn", "Uranus", "Mars"], answer: "Uranus", points: 500 }
+        ];
+
+        // Initialize the game
+        function initGame() {
+            // Get player name
+            playerName = playerNameInput.value.trim();
+            if (!playerName) {
+                alert("Please enter your name");
+                return;
+            }
+
+            // Prepare questions (use all 500)
+            questions = [...questionPool];
+            questionStatus = Array(questions.length).fill(null);
+
+            // Reset game state
+            currentPoints = 0;
+            currentQuestionIndex = 0;
+            timeLeft = 60;
+            gameActive = true;
+
+            // Update UI
+            pointsElement.textContent = currentPoints;
+            timeElement.textContent = timeLeft;
+            currentQuestionPointsElement.textContent = questions[currentQuestionIndex].points;
+            currentQuestionNumElement.textContent = currentQuestionIndex + 1;
+
+            // Show game screen
+            startScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            pauseScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+
+            // Start timer
+            startTimer();
+
+            // Load first question
+            loadQuestion();
+            updateProgressDots();
+        }
+
+        function loadQuestion() {
+            if (currentQuestionIndex >= questions.length) {
+                endGame(true);
+                return;
+            }
+
+            const currentQuestion = questions[currentQuestionIndex];
+            questionElement.textContent = currentQuestion.question;
+            currentQuestionPointsElement.textContent = currentQuestion.points;
+            currentQuestionNumElement.textContent = currentQuestionIndex + 1;
+
+            // Clear previous options
+            optionsContainer.innerHTML = '';
+
+            // Create option buttons
+            currentQuestion.options.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('option-btn');
+                button.addEventListener('click', () => selectAnswer(option));
+                optionsContainer.appendChild(button);
+            });
+
+            correctAnswer = currentQuestion.answer;
+            updateProgressDots();
+        }
+
+        function updateProgressDots() {
+            questionProgressContainer.innerHTML = '';
+            questions.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('progress-dot');
+                if (index === currentQuestionIndex) {
+                    dot.classList.add('current');
+                }
+                if (questionStatus[index] === true) {
+                    dot.classList.add('correct');
+                } else if (questionStatus[index] === false) {
+                    dot.classList.add('incorrect');
+                }
+                dot.addEventListener('click', () => navigateToQuestion(index));
+                questionProgressContainer.appendChild(dot);
+            });
+        }
+
+        function navigateToQuestion(index) {
+            if (index >= 0 && index < questions.length) {
+                currentQuestionIndex = index;
+                loadQuestion();
+            }
+        }
+
+        function selectAnswer(selectedOption) {
+            if (!gameActive) return;
+
+            const currentQuestionPoints = questions[currentQuestionIndex].points;
+            const optionButtons = document.querySelectorAll('.option-btn');
+
+            // Disable all buttons
+            optionButtons.forEach(button => {
+                button.disabled = true;
+                if (button.textContent === correctAnswer) {
+                    button.classList.add('correct');
+                } else if (button.textContent === selectedOption && selectedOption !== correctAnswer) {
+                    button.classList.add('incorrect');
+                }
+            });
+
+            // Check answer
+            if (selectedOption === correctAnswer) {
+                // Correct answer
+                currentPoints += currentQuestionPoints;
+                pointsElement.textContent = currentPoints;
+                questionStatus[currentQuestionIndex] = true;
+                
+                // Move to next question after delay
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    loadQuestion();
+                    
+                    // Re-enable buttons for next question
+                    optionButtons.forEach(button => {
+                        button.disabled = false;
+                        button.classList.remove('correct', 'incorrect');
+                    });
+                }, 1000);
+            } else {
+                // Wrong answer
+                questionStatus[currentQuestionIndex] = false;
+                gameActive = false;
+                clearInterval(timer);
+                
+                // Show correct answer
+                correctAnswerElement.textContent = correctAnswer;
+                correctAnswerDisplay.classList.remove('hidden');
+                gameOverButtons.classList.add('hidden');
+                
+                // Show game over screen
+                finalScoreElement.textContent = currentPoints;
+                gameScreen.classList.add('hidden');
+                gameOverScreen.classList.remove('hidden');
+                
+                // Save high score
+                saveHighScore(playerName, currentPoints);
+                updateHighScoresDisplay();
+            }
+        }
+
+        function startTimer() {
+            clearInterval(timer);
+            timer = setInterval(() => {
+                if (!isPaused && gameActive) {
+                    timeLeft--;
+                    timeElement.textContent = timeLeft;
+
+                    if (timeLeft <= 0) {
+                        endGame(false);
+                    }
+                }
+            }, 1000);
+        }
+
+        function pauseGame() {
+            isPaused = true;
+            gameActive = false;
+            pausedPointsElement.textContent = currentPoints;
+            gameScreen.classList.add('hidden');
+            pauseScreen.classList.remove('hidden');
+        }
+
+        function resumeGame() {
+            isPaused = false;
+            gameActive = true;
+            pauseScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+        }
+
+        function endGame(completed) {
+            clearInterval(timer);
+            gameActive = false;
+
+            // Update final score
+            finalScoreElement.textContent = currentPoints;
+
+            // Show appropriate message
+            if (completed) {
+                document.querySelector('.game-over').textContent = "Quiz Completed!";
+            }
+
+            // Save high score
+            saveHighScore(playerName, currentPoints);
+            updateHighScoresDisplay();
+        }
+
+        function saveHighScore(name, score) {
+            let highScores = JSON.parse(localStorage.getItem('quizHighScores')) || [];
+            
+            // Add new score
+            highScores.push({ name, score });
+            
+            // Sort by score (descending)
+            highScores.sort((a, b) => b.score - a.score);
+            
+            // Keep only top 10
+            highScores = highScores.slice(0, 10);
+            
+            // Save back to localStorage
+            localStorage.setItem('quizHighScores', JSON.stringify(highScores));
+        }
+
+        function updateHighScoresDisplay() {
+            const highScores = JSON.parse(localStorage.getItem('quizHighScores')) || [];
+            
+            // Clear current display
+            highScoresList.innerHTML = '';
+            gameOverScoresList.innerHTML = '';
+            
+            if (highScores.length === 0) {
+                highScoresList.innerHTML = '<p>No high scores yet</p>';
+                gameOverScoresList.innerHTML = '<p>No high scores yet</p>';
+                return;
+            }
+            
+            // Add each score to the display
+            highScores.forEach((score, index) => {
+                const scoreElement = document.createElement('div');
+                scoreElement.className = 'score-item';
+                scoreElement.innerHTML = `
+                    <span>${index + 1}. ${score.name}</span>
+                    <span>${score.score} points <button class="delete-btn" data-index="${index}">×</button></span>
+                `;
+                
+                // Clone for both displays
+                highScoresList.appendChild(scoreElement.cloneNode(true));
+                gameOverScoresList.appendChild(scoreElement.cloneNode(true));
+            });
+
+            // Add event listeners to delete buttons
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    deleteHighScore(parseInt(this.getAttribute('data-index')));
+                });
+            });
+        }
+
+        function deleteHighScore(index) {
+            let highScores = JSON.parse(localStorage.getItem('quizHighScores')) || [];
+            highScores.splice(index, 1);
+            localStorage.setItem('quizHighScores', JSON.stringify(highScores));
+            updateHighScoresDisplay();
+        }
+
+        function resetGame() {
+            clearInterval(timer);
+            gameActive = false;
+            isPaused = false;
+            
+            // Show start screen
+            gameScreen.classList.add('hidden');
+            pauseScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+            
+            // Update high scores
+            updateHighScoresDisplay();
+        }
+
+        function restartGame() {
+            resetGame();
+            initGame();
+        }
+
+        // Event listeners
+        startBtn.addEventListener('click', initGame);
+        pauseBtn.addEventListener('click', pauseGame);
+        resumeBtn.addEventListener('click', resumeGame);
+        restartBtn.addEventListener('click', restartGame);
+        menuBtn.addEventListener('click', resetGame);
+        playAgainBtn.addEventListener('click', restartGame);
+        goToMenuBtn.addEventListener('click', resetGame);
+        okBtn.addEventListener('click', () => {
+            correctAnswerDisplay.classList.add('hidden');
+            gameOverButtons.classList.remove('hidden');
+        });
+
+        // Initialize high scores display
+        updateHighScoresDisplay();
+    </script>
+</body>
+</html>
