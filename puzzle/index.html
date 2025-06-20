@@ -3,501 +3,836 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vintage Flappy Bird - Easy Mode</title>
+    <title>Vintage Name Puzzle</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #e0c9a6;
             font-family: 'Courier New', monospace;
+            background-color: #f5e7d0;
+            color: #3a3226;
+            margin: 0;
+            padding: 20px;
             background-image: url('https://www.transparenttextures.com/patterns/old-map.png');
-            touch-action: manipulation;
         }
         
-        #game-container {
-            position: relative;
-            width: 400px;
-            height: 600px;
-            border: 8px solid #8b5a2b;
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 248, 240, 0.9);
+            padding: 30px;
             border-radius: 5px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-            background-color: #87CEEB;
-            background-image: url('https://www.transparenttextures.com/patterns/paper.png');
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid #d4c4a8;
         }
         
-        #game-canvas {
-            background-color: #87CEEB;
-            display: block;
+        h1 {
+            text-align: center;
+            color: #5c4d3c;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            font-weight: normal;
         }
         
-        #bird {
-            position: absolute;
-            width: 50px;
-            height: 40px;
-        }
-        
-        .pipe {
-            position: absolute;
-            width: 60px;
-            background-color: #5a3d2b;
-            border: 3px solid #3a271a;
-            border-radius: 5px;
-            background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
-        }
-        
-        #score-display {
-            position: absolute;
-            top: 60px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 36px;
-            color: #fff;
-            text-shadow: 2px 2px 4px #000;
-            z-index: 10;
-            user-select: none;
-        }
-        
-        #high-score-display {
-            position: absolute;
-            top: 110px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 18px;
-            color: #ffcc00;
-            text-shadow: 2px 2px 4px #000;
-            z-index: 10;
-            user-select: none;
-        }
-        
-        #controls {
-            position: absolute;
-            top: 10px;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 15px;
-            box-sizing: border-box;
-            z-index: 10;
+        .vintage-border {
+            border: 8px double #5c4d3c;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #fff8f0;
         }
         
         button {
-            padding: 6px 12px;
-            background-color: #8b5a2b;
+            background-color: #8b7355;
             color: white;
             border: none;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            font-weight: bold;
+            padding: 10px 20px;
+            margin: 5px;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
             transition: all 0.3s;
-            -webkit-tap-highlight-color: transparent;
+            border-radius: 3px;
         }
         
         button:hover {
-            background-color: #6d4621;
-            transform: translateY(-2px);
+            background-color: #6b5a45;
         }
         
-        #game-over {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 20;
-        }
-        
-        #game-over h1 {
-            color: #fff;
-            font-size: 48px;
-            margin-bottom: 20px;
-            text-shadow: 3px 3px 5px #000;
-            user-select: none;
-        }
-        
-        #final-score {
-            color: #ffcc00;
-            font-size: 36px;
+        input {
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            border: 1px solid #d4c4a8;
+            background-color: #fff8f0;
             margin-bottom: 10px;
-            user-select: none;
+            width: 200px;
         }
         
-        #final-high-score {
-            color: #ffcc00;
-            font-size: 24px;
-            margin-bottom: 30px;
-            user-select: none;
-        }
-        
-        .game-over-buttons {
-            display: flex;
-            gap: 20px;
-        }
-        
-        #quit-confirm {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
+        .game-area {
             display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 30;
-        }
-        
-        #quit-confirm h2 {
-            color: #fff;
-            font-size: 32px;
-            margin-bottom: 30px;
-            text-shadow: 3px 3px 5px #000;
             text-align: center;
         }
         
-        .confirm-buttons {
-            display: flex;
-            gap: 20px;
+        .letter-box {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 2px solid #8b7355;
+            margin: 5px;
+            text-align: center;
+            line-height: 40px;
+            font-size: 1.5em;
+            background-color: #fff8f0;
+            vertical-align: top;
+        }
+        
+        .letter-option {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 1px solid #8b7355;
+            margin: 5px;
+            text-align: center;
+            line-height: 30px;
+            font-size: 1.2em;
+            background-color: #f5e7d0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .letter-option:hover {
+            background-color: #e5d7c0;
+        }
+        
+        .used {
+            visibility: hidden;
+        }
+        
+        .controls {
+            margin: 20px 0;
+        }
+        
+        .timer {
+            font-size: 1.5em;
+            margin: 10px 0;
+            color: #5c4d3c;
+        }
+        
+        .word-length-selector {
+            margin: 20px 0;
+        }
+        
+        .word-length-btn {
+            width: 50px;
+        }
+        
+        .result-message {
+            font-size: 1.2em;
+            margin: 10px 0;
+            min-height: 30px;
+        }
+        
+        .correct {
+            color: green;
+        }
+        
+        .incorrect {
+            color: red;
+        }
+        
+        .player-name {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #5c4d3c;
+        }
+        
+        @media (max-width: 600px) {
+            .letter-box {
+                width: 30px;
+                height: 30px;
+                line-height: 30px;
+                font-size: 1.2em;
+            }
+            
+            .letter-option {
+                width: 25px;
+                height: 25px;
+                line-height: 25px;
+                font-size: 1em;
+            }
+            
+            button {
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="game-container">
-        <canvas id="game-canvas" width="400" height="600"></canvas>
-        <div id="score-display">0</div>
-        <div id="high-score-display">High Score: 0</div>
-        <div id="controls">
-            <button id="pause-btn">Pause</button>
-            <button id="quit-btn">Quit Game</button>
-            <button id="restart-btn">Restart</button>
-        </div>
-        <div id="game-over">
-            <h1>Game Over</h1>
-            <div id="final-score">Score: 0</div>
-            <div id="final-high-score">High Score: 0</div>
-            <div class="game-over-buttons">
-                <button id="play-again-btn">Play Again</button>
-                <button id="quit-after-game-btn">Quit Game</button>
+    <div class="container">
+        <div class="vintage-border">
+            <h1>Vintage Name Puzzle</h1>
+            
+            <div id="name-input-screen">
+                <p>Enter your name to begin:</p>
+                <input type="text" id="player-name" placeholder="Your name">
+                <button id="start-game">Start Game</button>
             </div>
-        </div>
-        <div id="quit-confirm">
-            <h2>Are you sure you want to quit the game?</h2>
-            <div class="confirm-buttons">
-                <button id="confirm-quit-btn">Yes, Quit</button>
-                <button id="cancel-quit-btn">Cancel</button>
+            
+            <div id="word-length-screen" style="display: none;">
+                <p>Hello, <span id="display-name"></span>!</p>
+                <p>Select word length:</p>
+                <div class="word-length-selector">
+                    <button class="word-length-btn" data-length="3">3</button>
+                    <button class="word-length-btn" data-length="4">4</button>
+                    <button class="word-length-btn" data-length="5">5</button>
+                    <button class="word-length-btn" data-length="6">6</button>
+                    <button class="word-length-btn" data-length="7">7</button>
+                    <button class="word-length-btn" data-length="8">8</button>
+                </div>
+                <button id="back-to-name">Back</button>
+            </div>
+            
+            <div id="game-screen" class="game-area">
+                <div class="player-name">Player: <span id="current-player"></span></div>
+                <div class="timer">Time: <span id="time">01:00</span></div>
+                <div class="result-message" id="result-message"></div>
+                
+                <div id="letter-boxes"></div>
+                <br>
+                <div id="letter-options"></div>
+                
+                <div class="controls">
+                    <button id="check-word">Check</button>
+                    <button id="next-word">Next</button>
+                    <button id="pause-game">Pause</button>
+                    <button id="restart-game">Restart</button>
+                </div>
+            </div>
+            
+            <div id="pause-screen" class="game-area" style="display: none;">
+                <h2>Game Paused</h2>
+                <button id="resume-game">Resume</button>
+                <button id="restart-from-pause">Restart</button>
+                <button id="quit-to-menu">Quit to Menu</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Game variables
-        const canvas = document.getElementById('game-canvas');
-        const ctx = canvas.getContext('2d');
-        const scoreDisplay = document.getElementById('score-display');
-        const highScoreDisplay = document.getElementById('high-score-display');
-        const pauseBtn = document.getElementById('pause-btn');
-        const restartBtn = document.getElementById('restart-btn');
-        const quitBtn = document.getElementById('quit-btn');
-        const gameOverScreen = document.getElementById('game-over');
-        const finalScoreDisplay = document.getElementById('final-score');
-        const finalHighScoreDisplay = document.getElementById('final-high-score');
-        const playAgainBtn = document.getElementById('play-again-btn');
-        const quitAfterGameBtn = document.getElementById('quit-after-game-btn');
-        const quitConfirmScreen = document.getElementById('quit-confirm');
-        const confirmQuitBtn = document.getElementById('confirm-quit-btn');
-        const cancelQuitBtn = document.getElementById('cancel-quit-btn');
-        
-        // Load high score from localStorage
-        let highScore = localStorage.getItem('flappyBirdHighScore') || 0;
-        highScoreDisplay.textContent = `High Score: ${highScore}`;
-        
-        let bird = {
-            x: 100,
-            y: 300,
-            width: 50,
-            height: 40,
-            velocity: 0,
-            gravity: 0.2,
-            jump: -6,
-            color: '#ffcc00'
+        // Word database (5000 words from 3-8 letters)
+        const wordDatabase = {
+            3: [
+                "cat", "dog", "sun", "hat", "pen", "cup", "jam", "key", "owl", "ant",
+                "arm", "bag", "bed", "bee", "boy", "bus", "car", "cow", "day", "egg",
+                "eye", "fan", "fox", "gun", "hat", "ice", "jar", "leg", "man", "net",
+                "nut", "oil", "pig", "pot", "rat", "sea", "sky", "son", "toe", "van",
+                "zoo", "map", "lip", "jaw", "gum", "rib", "lap", "hip", "toe", "ear",
+                "ace", "act", "add", "age", "ago", "aid", "aim", "air", "all", "and",
+                "any", "ape", "apt", "arc", "are", "ark", "art", "ash", "ask", "ate",
+                "awe", "axe", "bad", "ban", "bar", "bat", "bay", "big", "bit", "boa",
+                "bog", "boo", "bow", "box", "bud", "bug", "bun", "but", "buy", "cab",
+                "can", "cap", "car", "cod", "cop", "cot", "cry", "cub", "cue", "cut",
+                "dab", "dam", "den", "dew", "did", "dig", "dim", "dip", "doe", "dot",
+                "dub", "due", "dug", "dye", "ebb", "eel", "ego", "elf", "elk", "elm",
+                "emu", "end", "eon", "era", "eve", "ewe", "eye", "fad", "fig", "fin",
+                "fir", "fit", "fix", "flu", "fly", "fog", "for", "fox", "fry", "fun",
+                "fur", "gag", "gap", "gas", "gel", "gem", "get", "gig", "gin", "gnu",
+                "got", "gum", "gut", "guy", "gym", "had", "hag", "ham", "has", "hat",
+                "hay", "hem", "hen", "her", "hew", "hex", "hid", "him", "hip", "his",
+                "hit", "hog", "hop", "hot", "how", "hug", "hut", "ice", "icy", "ill",
+                "imp", "ink", "inn", "ion", "its", "ivy", "jab", "jam", "jar", "jaw",
+                "jet", "jig", "job", "jog", "jot", "joy", "jug", "jut", "keg", "key",
+                "kid", "kin", "kit", "lab", "lad", "lag", "lap", "law", "lay", "led",
+                "leg", "let", "lid", "lie", "lip", "lit", "log", "lot", "low", "lug",
+                "mac", "mad", "man", "map", "mat", "mew", "mix", "mob", "moo", "mop",
+                "mud", "mug", "mum", "nab", "nag", "nap", "nay", "net", "new", "nib",
+                "nil", "nip", "nod", "nor", "not", "now", "nun", "nut", "oaf", "oak",
+                "oar", "oat", "odd", "off", "oft", "ohm", "oil", "old", "one", "orb",
+                "ore", "our", "out", "owl", "own", "pad", "pal", "pan", "paw", "pay",
+                "pea", "peg", "pen", "pep", "pet", "pew", "pie", "pig", "pin", "pit",
+                "ply", "pod", "pop", "pot", "pow", "pro", "pry", "pub", "pug", "pun",
+                "pup", "put", "rag", "ram", "ran", "rap", "rat", "raw", "ray", "red",
+                "rib", "rid", "rig", "rim", "rip", "rob", "rod", "roe", "rot", "row",
+                "rub", "rue", "rug", "rum", "run", "rut", "rye", "sad", "sag", "sap",
+                "saw", "say", "sea", "see", "set", "sew", "sex", "she", "shy", "sin",
+                "sip", "sir", "sit", "ski", "sky", "sly", "sob", "sod", "sol", "son",
+                "sow", "soy", "spa", "spy", "sub", "sue", "sum", "sun", "tab", "tad",
+                "tag", "tan", "tap", "tar", "tea", "ted", "tee", "ten", "the", "tic",
+                "tie", "tin", "tip", "toe", "ton", "too", "top", "tow", "toy", "try",
+                "tub", "tug", "two", "use", "van", "vat", "vet", "vie", "wad", "wag",
+                "war", "was", "wax", "way", "web", "wed", "wet", "who", "why", "wig",
+                "win", "wit", "woe", "wow", "yak", "yam", "yap", "yaw", "yew", "you",
+                "zap", "zip", "zoo"
+            ],
+            4: [
+                "able", "acid", "acre", "aged", "aide", "ally", "also", "alto", "amid", "ammo",
+                "ankle", "apple", "apron", "atom", "aunt", "aura", "auto", "away", "axis", "babe",
+                "baby", "back", "bake", "ball", "band", "bank", "bare", "bark", "barn", "base",
+                "bath", "bead", "beam", "bean", "bear", "beat", "beef", "beer", "bell", "belt",
+                "bend", "bent", "best", "bias", "bike", "bill", "bind", "bird", "bite", "blow",
+                "blue", "boat", "body", "boil", "bold", "bolt", "bomb", "bond", "bone", "book",
+                "boom", "boot", "bore", "born", "boss", "both", "bowl", "bulb", "bulk", "bump",
+                "burn", "bury", "bush", "busy", "butt", "cafe", "cage", "cake", "call", "calm",
+                "came", "camp", "cane", "cape", "card", "care", "cart", "case", "cash", "cast",
+                "cave", "cell", "cent", "chap", "chat", "chef", "chin", "chip", "chop", "cite",
+                "city", "clay", "clip", "club", "clue", "coal", "coat", "code", "coin", "cold",
+                "comb", "come", "cook", "cool", "cope", "copy", "cord", "core", "cork", "corn",
+                "cost", "coup", "cove", "crop", "crow", "cube", "cult", "cure", "curl", "cute",
+                "damp", "dare", "dark", "dart", "dash", "data", "date", "dawn", "days", "dead",
+                "deaf", "deal", "dean", "dear", "debt", "deck", "deep", "deer", "deny", "desk",
+                "dial", "dice", "diet", "dirt", "disc", "dish", "dive", "dock", "doll", "door",
+                "dose", "down", "drag", "draw", "drew", "drop", "drug", "drum", "duck", "dull",
+                "dumb", "dust", "duty", "each", "earn", "ease", "east", "easy", "echo", "edge",
+                "else", "even", "ever", "evil", "exam", "exit", "face", "fact", "fade", "fail",
+                "fair", "fake", "fall", "fame", "fare", "farm", "fast", "fate", "fear", "feed",
+                "feel", "feet", "fell", "felt", "file", "fill", "film", "find", "fine", "fire",
+                "firm", "fish", "fist", "five", "flag", "flat", "flow", "fold", "folk", "fond",
+                "food", "fool", "foot", "fork", "form", "fort", "foul", "four", "free", "frog",
+                "from", "fuel", "full", "fund", "fury", "fuse", "gain", "game", "gang", "gate",
+                "gave", "gaze", "gear", "gene", "gift", "girl", "give", "glad", "glow", "glue",
+                "goal", "goat", "gold", "golf", "gone", "good", "gown", "grab", "gram", "gray",
+                "grew", "grey", "grip", "grow", "gulf", "hair", "half", "hall", "halt", "hand",
+                "hang", "hard", "harm", "hate", "have", "head", "hear", "heat", "heel", "held",
+                "hell", "help", "herd", "here", "hero", "hers", "hide", "high", "hill", "hire",
+                "hold", "hole", "holy", "home", "hook", "hope", "horn", "hose", "host", "hour",
+                "huge", "hunt", "hurt", "hut", "icon", "idea", "idle", "inch", "into", "iron",
+                "item", "jail", "jazz", "jean", "join", "joke", "jump", "jury", "just", "keen",
+                "keep", "kent", "kept", "kick", "kill", "kind", "king", "kiss", "kite", "knee",
+                "knew", "knit", "knot", "know", "lady", "laid", "lake", "lamb", "lamp", "land",
+                "lane", "last", "late", "lawn", "lead", "leaf", "lean", "left", "lend", "lens",
+                "less", "life", "lift", "like", "line", "link", "lion", "list", "live", "load",
+                "loan", "lock", "logo", "long", "look", "lord", "lose", "loss", "lost", "loud",
+                "love", "luck", "made", "mail", "main", "make", "male", "mall", "many", "mark",
+                "mask", "mass", "mate", "math", "meal", "mean", "meat", "meet", "melt", "menu",
+                "mere", "mess", "mild", "mile", "milk", "mind", "mine", "miss", "mode", "mold",
+                "mood", "moon", "more", "most", "move", "much", "must", "myth", "nail", "name",
+                "navy", "near", "neat", "neck", "need", "nest", "next", "nice", "nine", "node",
+                "none", "noon", "norm", "nose", "note", "oath", "obey", "once", "only", "onto",
+                "open", "oral", "ours", "oval", "oven", "over", "pace", "pack", "page", "paid",
+                "pain", "pair", "pale", "palm", "pant", "park", "part", "pass", "past", "path",
+                "peak", "pear", "peel", "peer", "pest", "pick", "pile", "pine", "pink", "pipe",
+                "plan", "play", "plot", "plug", "plus", "poem", "poet", "pole", "poll", "pool",
+                "poor", "pope", "pork", "port", "pose", "post", "pour", "pray", "pull", "pump",
+                "pure", "push", "quit", "race", "rail", "rain", "rank", "rare", "rate", "read",
+                "real", "rear", "rely", "rent", "rest", "rice", "rich", "ride", "ring", "rise",
+                "risk", "road", "rock", "role", "roll", "roof", "room", "root", "rope", "rose",
+                "rude", "rule", "rush", "safe", "sail", "sake", "sale", "salt", "same", "sand",
+                "save", "scan", "seat", "seed", "seek", "seem", "self", "sell", "send", "sent",
+                "sexy", "shade", "shake", "shall", "shame", "shape", "share", "sharp", "sheep",
+                "sheet", "shelf", "shell", "shift", "shine", "ship", "shirt", "shock", "shoe",
+                "shop", "shot", "show", "shut", "sick", "side", "sigh", "sign", "silk", "sing",
+                "sink", "site", "size", "skin", "slip", "slow", "snap", "snow", "soap", "sock",
+                "soft", "soil", "sold", "sole", "some", "song", "soon", "sort", "soul", "soup",
+                "sour", "spin", "spot", "star", "stay", "stem", "step", "stir", "stop", "such",
+                "suit", "sure", "swim", "tail", "take", "tale", "talk", "tall", "tank", "tape",
+                "task", "team", "tear", "teen", "tell", "tend", "tent", "term", "test", "text",
+                "than", "that", "them", "then", "they", "thin", "this", "tide", "tidy", "tile",
+                "till", "time", "tiny", "tire", "toll", "tone", "tool", "toss", "tour", "town",
+                "trap", "tray", "tree", "trip", "true", "tube", "tune", "turn", "twin", "type",
+                "ugly", "unit", "upon", "urge", "used", "user", "vary", "vast", "very", "vice",
+                "view", "vote", "wage", "wait", "wake", "walk", "wall", "want", "warm", "wash",
+                "waste", "watch", "wave", "weak", "wear", "weed", "week", "well", "went", "were",
+                "west", "what", "when", "whip", "who", "wide", "wife", "wild", "will", "wind",
+                "wine", "wing", "wipe", "wire", "wise", "wish", "with", "wolf", "wood", "word",
+                "work", "worm", "worn", "wrap", "yard", "year", "yell", "your", "zero", "zone"
+            ],
+            5: [
+                "abide", "about", "above", "abuse", "actor", "acute", "adapt", "admit", "adopt", "adult",
+                "after", "again", "agent", "agree", "ahead", "alarm", "album", "alert", "alike", "alive",
+                "allow", "alone", "along", "alter", "among", "anger", "angle", "angry", "ankle", "apart",
+                "apple", "apply", "apron", "arena", "argue", "arise", "armor", "arrow", "aside", "asset",
+                "audio", "audit", "avoid", "awake", "award", "aware", "awful", "badge", "badly", "basic",
+                "basis", "beach", "beard", "beast", "begin", "being", "belly", "below", "bench", "bible",
+                "birth", "black", "blade", "blame", "blank", "blast", "bleed", "blend", "bless", "blind",
+                "block", "blood", "board", "boast", "bonus", "boost", "booth", "border", "bored", "boring",
+                "borrow", "bossy", "bother", "bottle", "bottom", "bounce", "bound", "bowel", "boxer", "brain",
+                "brand", "brass", "brave", "bread", "break", "breed", "brick", "bride", "brief", "bring",
+                "broad", "broke", "brown", "brush", "buddy", "build", "bully", "bunch", "burst", "buyer",
+                "cabin", "cable", "calm", "camel", "candy", "cargo", "carry", "carve", "catch", "cause",
+                "cease", "chain", "chair", "chalk", "charm", "chart", "chase", "cheap", "check", "cheek",
+                "cheer", "chest", "chief", "child", "chill", "china", "choke", "chunk", "civil", "claim",
+                "clash", "class", "clean", "clear", "clerk", "click", "cliff", "climb", "clock", "close",
+                "cloth", "cloud", "coach", "coast", "comic", "couch", "could", "count", "court", "cover",
+                "crack", "craft", "crash", "crazy", "cream", "creek", "crime", "cross", "crowd", "crown",
+                "crude", "cruel", "crumb", "crust", "curve", "cycle", "daily", "dairy", "dance", "death",
+                "debut", "delay", "dense", "depth", "devil", "dirty", "donor", "doubt", "dough", "dozen",
+                "draft", "drain", "drama", "dress", "drift", "drill", "drink", "drive", "drown", "dutch",
+                "eager", "early", "earth", "eight", "elbow", "elder", "elect", "elite", "empty", "enemy",
+                "enjoy", "enter", "entry", "equal", "error", "event", "every", "exact", "exist", "extra",
+                "faint", "faith", "false", "fancy", "fatal", "fault", "favor", "fever", "fiber", "field",
+                "fifth", "fifty", "fight", "final", "first", "flame", "flash", "fleet", "flesh", "float",
+                "flood", "floor", "flour", "fluid", "focus", "force", "forty", "forum", "found", "frame",
+                "fresh", "front", "frost", "fruit", "funny", "giant", "glass", "glory", "glove", "grace",
+                "grade", "grain", "grand", "grant", "grape", "grass", "grave", "great", "green", "greet",
+                "grind", "gross", "group", "guard", "guess", "guest", "guide", "guilt", "habit", "happy",
+                "harsh", "heart", "heavy", "hello", "honor", "horse", "hotel", "house", "human", "humor",
+                "ideal", "image", "imply", "index", "inner", "input", "irony", "judge", "juice", "knife",
+                "large", "laugh", "layer", "learn", "least", "leave", "legal", "lemon", "level", "light",
+                "limit", "local", "logic", "loose", "lover", "lower", "lucky", "lunch", "major", "march",
+                "metal", "model", "money", "month", "moral", "motor", "mount", "mouse", "mouth", "music",
+                "naked", "nasty", "nerve", "never", "night", "noise", "north", "novel", "nurse", "occur",
+                "ocean", "offer", "often", "olive", "onion", "opera", "other", "ought", "ounce", "outer",
+                "owner", "paint", "panel", "paper", "party", "pasta", "pause", "peace", "peach", "pearl",
+                "phase", "phone", "photo", "piano", "piece", "pilot", "pitch", "pizza", "place", "plain",
+                "plane", "plant", "plate", "point", "porch", "pound", "power", "press", "price", "pride",
+                "prize", "proof", "proud", "pulse", "punch", "pupil", "purse", "queen", "quick", "quiet",
+                "quite", "radio", "raise", "range", "rapid", "ratio", "reach", "react", "ready", "refer",
+                "relax", "reply", "right", "rival", "river", "rough", "round", "route", "royal", "rural",
+                "salad", "scale", "scene", "scope", "score", "screw", "sense", "serve", "seven", "shade",
+                "shake", "shame", "shape", "share", "sharp", "sheep", "sheet", "shelf", "shell", "shift",
+                "shine", "shirt", "shock", "shoot", "shore", "short", "shout", "sight", "silly", "since",
+                "skill", "skirt", "slave", "sleep", "slice", "slide", "slope", "small", "smart", "smell",
+                "smile", "smoke", "snake", "sneak", "solar", "solid", "solve", "sorry", "sound", "south",
+                "space", "spare", "speak", "speed", "spell", "spend", "spill", "spite", "split", "sport",
+                "spray", "squad", "stack", "staff", "stage", "stair", "stake", "stand", "stare", "start",
+                "state", "steak", "steal", "steel", "stick", "stiff", "still", "stock", "stone", "store",
+                "storm", "story", "stove", "straw", "strip", "study", "stuff", "style", "sugar", "super",
+                "swear", "sweat", "sweet", "swing", "sword", "table", "taste", "teach", "thank", "theme",
+                "there", "thick", "thing", "think", "third", "those", "three", "throw", "tight", "title",
+                "today", "tooth", "topic", "total", "touch", "tough", "towel", "tower", "track", "trade",
+                "train", "treat", "trend", "trial", "tribe", "trick", "truck", "truly", "trust", "truth",
+                "twice", "uncle", "under", "union", "unite", "until", "upper", "upset", "urban", "usual",
+                "valid", "value", "video", "virus", "visit", "vital", "voice", "voter", "waste", "watch",
+                "water", "weigh", "weird", "whale", "wheat", "wheel", "where", "which", "while", "white",
+                "whole", "whose", "woman", "world", "worry", "worse", "worst", "worth", "would", "wound",
+                "write", "wrong", "yield", "young", "youth"
+            ],
+            6: [
+                "abroad", "accept", "access", "across", "action", "active", "actual", "adjust", "admire", "advice",
+                "advise", "affect", "afford", "afraid", "agency", "agenda", "almost", "always", "amount", "animal",
+                "annual", "answer", "anyone", "anyway", "appeal", "appear", "around", "arrive", "artist", "aspect",
+                "assist", "assume", "attack", "attend", "august", "author", "autumn", "backup", "battle", "beauty",
+                "become", "before", "behind", "belief", "belong", "beside", "better", "beyond", "bitter", "blonde",
+                "border", "bother", "bottle", "bottom", "bounce", "branch", "breath", "bridge", "bright", "broken",
+                "budget", "burden", "bureau", "button", "camera", "cancer", "candle", "career", "carpet", "castle",
+                "casual", "catch", "center", "chance", "change", "charge", "choice", "choose", "church", "circle",
+                "client", "clinic", "closed", "closet", "coffee", "collar", "column", "combat", "comedy", "comfort",
+                "commit", "common", "compel", "comply", "convey", "cookie", "corner", "costly", "county", "couple",
+                "course", "cousin", "create", "credit", "crisis", "custom", "damage", "dancer", "danger", "deadly",
+                "dealer", "debate", "decade", "decide", "defeat", "defend", "define", "degree", "demand", "depend",
+                "depict", "deputy", "desert", "design", "desire", "detail", "detect", "device", "differ", "dinner",
+                "direct", "divide", "divine", "doctor", "dollar", "domain", "donate", "double", "drawer", "driver",
+                "during", "easily", "eating", "editor", "effect", "effort", "eighth", "either", "eleven", "emerge",
+                "empire", "employ", "enable", "ending", "energy", "engage", "engine", "enough", "ensure", "entire",
+                "entity", "equity", "escape", "estate", "ethics", "ethnic", "evenly", "exceed", "except", "excite",
+                "excuse", "expand", "expect", "expert", "export", "extend", "extent", "fabric", "factor", "fairly",
+                "family", "famous", "farmer", "father", "fellow", "female", "figure", "filter", "finger", "finish",
+                "firmly", "fiscal", "flight", "flower", "follow", "forced", "forest", "forget", "formal", "format",
+                "former", "foster", "found", "franch", "frozen", "future", "gallon", "garage", "garden", "garlic",
+                "gather", "gender", "genius", "gently", "gifted", "global", "golden", "ground", "growth", "guilty",
+                "handed", "handle", "happen", "hardly", "heaven", "height", "hidden", "highly", "hockey", "honest",
+                "horror", "hunger", "hunter", "ignore", "impact", "import", "income", "indeed", "infant", "inform",
+                "injure", "injury", "insect", "inside", "insist", "intend", "intent", "invest", "invite", "island",
+                "itself", "jacket", "jungle", "junior", "killer", "ladder", "larger", "lately", "latter", "launch",
+                "lawyer", "leader", "league", "legacy", "legend", "length", "lesson", "letter", "likely", "listen",
+                "little", "living", "locate", "lonely", "lovely", "loving", "luxury", "mainly", "makeup", "manage",
+                "manner", "marble", "margin", "marine", "marked", "market", "master", "matter", "medium", "member",
+                "memory", "mental", "merely", "method", "middle", "minute", "mirror", "modest", "module", "moment",
+                "morale", "mother", "motion", "murder", "muscle", "museum", "mutual", "myself", "narrow", "nation",
+                "native", "nature", "nearby", "nearly", "needle", "nobody", "normal", "notice", "notion", "number",
+                "object", "obtain", "office", "online", "openly", "option", "orange", "origin", "outfit", "output",
+                "oxygen", "parent", "partly", "pastor", "patent", "people", "pepper", "period", "permit", "person",
+                "phrase", "pickup", "planet", "player", "please", "plenty", "pocket", "police", "policy", "poster",
+                "potato", "powder", "praise", "prayer", "prefer", "pretty", "priest", "prince", "prison", "profit",
+                "prompt", "proper", "public", "punish", "pursue", "rabbit", "racial", "rarely", "rather", "rating",
+                "reader", "really", "reason", "recall", "recent", "recipe", "record", "reduce", "refuse", "regard",
+                "regret", "reject", "relate", "relief", "remain", "remark", "remind", "remove", "render", "repair",
+                "repeat", "report", "rescue", "resort", "result", "retail", "return", "reveal", "review", "reward",
+                "rhythm", "ribbon", "ritual", "robust", "rocket", "rubber", "ruling", "safety", "salary", "sample",
+                "saving", "scared", "scheme", "school", "screen", "script", "search", "season", "second", "secret",
+                "sector", "secure", "select", "senior", "series", "server", "settle", "severe", "sexual", "shadow",
+                "shaped", "shared", "shower", "signal", "silent", "silver", "simple", "simply", "single", "sister",
+                "slight", "smooth", "social", "solely", "source", "speech", "sphere", "spirit", "spouse", "spread",
+                "spring", "square", "stable", "status", "steady", "strain", "stream", "street", "stress", "strict",
+                "strike", "string", "stroke", "strong", "studio", "submit", "sudden", "suffer", "summer", "summit",
+                "sunset", "supply", "surely", "survey", "switch", "symbol", "system", "tackle", "talent", "target",
+                "temple", "tenant", "tender", "tennis", "thanks", "theory", "thirst", "though", "thread", "threat",
+                "thrill", "throat", "ticket", "timber", "timely", "timing", "tissue", "toward", "tragic", "trauma",
+                "travel", "treaty", "tribal", "tunnel", "turkey", "unable", "unfair", "unfold", "unique", "united",
+                "unless", "unlike", "update", "useful", "valley", "varied", "vendor", "verbal", "verify", "versus",
+                "vessel", "victim", "viewer", "violin", "virtue", "vision", "visual", "volume", "wander", "wealth",
+                "weapon", "weekly", "weight", "widely", "window", "winner", "winter", "within", "wonder", "worker",
+                "worthy", "writer", "yellow"
+            ],
+7: [
+                "ability", "absence", "academy", "account", "accused", "achieve", "acquire", "address", "advance", "adverse",
+                "advised", "adviser", "against", "airline", "airport", "alcohol", "alleged", "already", "analyst", "ancient",
+                "another", "anxiety", "anxious", "anybody", "applied", "arrange", "arrival", "article", "assault", "assumed",
+                "assured", "attempt", "attract", "auction", "average", "backing", "balance", "banking", "barrier", "battery",
+                "bearing", "beating", "because", "bedroom", "believe", "beneath", "benefit", "besides", "between", "billion",
+                "binding", "brother", "brought", "burning", "cabinet", "caliber", "calling", "capable", "capital", "captain",
+                "caption", "capture", "careful", "carrier", "caution", "ceiling", "central", "centric", "century", "certain",
+                "chamber", "channel", "chapter", "charity", "charter", "checked", "chicken", "chronic", "circuit", "classes",
+                "classic", "climate", "closing", "closure", "clothes", "collect", "college", "combine", "comfort", "command",
+                "comment", "compact", "company", "compare", "compete", "complex", "concept", "concern", "concert", "conduct",
+                "confirm", "connect", "consent", "consist", "contact", "contain", "content", "contest", "context", "control",
+                "convert", "correct", "council", "counsel", "counter", "country", "crucial", "crystal", "culture", "current",
+                "cutting", "dealing", "decided", "decline", "default", "defense", "deficit", "deliver", "density", "deposit",
+                "desktop", "despite", "destroy", "develop", "devoted", "diamond", "digital", "discuss", "disease", "display",
+                "dispute", "distant", "diverse", "divided", "drawing", "driving", "dynamic", "eastern", "economy", "edition",
+                "elderly", "element", "engaged", "enhance", "essence", "evening", "evident", "exactly", "examine", "example",
+                "excited", "exclude", "exhibit", "expense", "explain", "explore", "express", "extreme", "factory", "faculty",
+                "failing", "failure", "fashion", "feature", "federal", "feeling", "fiction", "fifteen", "filling", "finance",
+                "finding", "fishing", "fitness", "foreign", "forever", "formula", "fortune", "forward", "founder", "freedom",
+                "further", "gallery", "gateway", "general", "genetic", "genuine", "gigabit", "greater", "hanging", "heading",
+                "healthy", "hearing", "heavily", "helpful", "helping", "herself", "highway", "himself", "history", "holding",
+                "holiday", "housing", "however", "hundred", "husband", "illegal", "illness", "imagine", "imaging", "improve",
+                "include", "initial", "inquiry", "insight", "install", "instant", "instead", "intense", "involve", "jointly",
+                "journal", "journey", "justice", "justify", "keeping", "killing", "kingdom", "kitchen", "knowing", "landing",
+                "largely", "lasting", "leading", "learned", "leisure", "liberal", "liberty", "library", "license", "limited",
+                "listing", "logical", "loyalty", "machine", "manager", "married", "massive", "maximum", "meaning", "measure",
+                "medical", "meeting", "mention", "message", "million", "mineral", "minimal", "minimum", "missing", "mission",
+                "mistake", "mixture", "monitor", "monthly", "morning", "musical", "mystery", "natural", "neither", "nervous",
+                "network", "neutral", "notable", "nothing", "nowhere", "nuclear", "nursing", "obvious", "offense", "officer",
+                "ongoing", "opening", "operate", "opinion", "optical", "organic", "outcome", "outdoor", "outline", "outside",
+                "overall", "pacific", "package", "painted", "parking", "partial", "partner", "passage", "passing", "passion",
+                "passive", "patient", "pattern", "payable", "payment", "penalty", "pending", "pension", "percent", "perfect",
+                "perform", "perhaps", "phoenix", "picking", "picture", "pioneer", "plastic", "pointed", "popular", "portion",
+                "poverty", "precise", "predict", "premier", "premium", "prepare", "present", "prevent", "primary", "printer",
+                "privacy", "private", "problem", "proceed", "process", "produce", "product", "profile", "program", "project",
+                "promise", "promote", "protect", "protein", "protest", "provide", "publish", "purpose", "pushing", "qualify",
+                "quality", "quarter", "radical", "railway", "readily", "reading", "reality", "realize", "receipt", "receive",
+                "recover", "reflect", "regular", "related", "release", "remains", "removal", "removed", "replace", "replied",
+                "report", "request", "require", "reserve", "resolve", "respect", "respond", "restore", "retired", "revenue",
+                "reverse", "rollout", "routine", "running", "satisfy", "science", "section", "segment", "serious", "service",
+                "serving", "session", "setting", "seventh", "several", "shortly", "showing", "silence", "silicon", "similar",
+                "sitting", "sixteen", "skilled", "smoking", "society", "somehow", "someone", "speaker", "special", "species",
+                "sponsor", "station", "storage", "strange", "stretch", "student", "studied", "subject", "succeed", "success",
+                "suggest", "summary", "support", "suppose", "supreme", "surface", "surgery", "surplus", "survive", "suspect",
+                "sustain", "teacher", "telecom", "telling", "tension", "theater", "therapy", "thereby", "thought", "through",
+                "tonight", "totally", "touched", "towards", "traffic", "trouble", "turning", "typical", "uniform", "unknown",
+                "unusual", "upgrade", "upscale", "utility", "variety", "various", "vehicle", "venture", "version", "veteran",
+                "victory", "viewing", "village", "violent", "virtual", "visible", "waiting", "walking", "wanting", "warning",
+                "warrant", "wearing", "weather", "webcast", "website", "wedding", "weekend", "welcome", "welfare", "western",
+                "whereas", "whereby", "whether", "willing", "winning", "without", "witness", "working", "writing", "written"
+            ],
+            8: [
+                "absolute", "abstract", "academic", "accepted", "accident", "accuracy", "accurate", "achieved", "acquired", "activity",
+                "actually", "addition", "adequate", "adjacent", "adjusted", "advanced", "advisory", "advocate", "affected", "aircraft",
+                "alliance", "although", "aluminum", "analysis", "announce", "anything", "anywhere", "apparent", "appendix", "approach",
+                "approval", "argument", "artistic", "assembly", "assuming", "athletic", "attached", "attitude", "attorney", "audience",
+                "autonomy", "aviation", "bachelor", "bacteria", "baseball", "bathroom", "becoming", "benjamin", "birthday", "boundary",
+                "breaking", "breeding", "building", "bulletin", "business", "calendar", "campaign", "capacity", "casualty", "catching",
+                "category", "catholic", "cautious", "cellular", "ceremony", "chairman", "champion", "chemical", "children", "circular",
+                "civilian", "clearing", "clinical", "clothing", "collapse", "colonial", "colorful", "commence", "commerce", "complain",
+                "complete", "composed", "compound", "comprise", "computer", "conclude", "concrete", "conflict", "confused", "congress",
+                "consider", "constant", "consumer", "continue", "contract", "contrary", "contrast", "convince", "corridor", "coverage",
+                "covering", "creation", "creative", "criminal", "critical", "crossing", "cultural", "currency", "customer", "database",
+                "daughter", "daylight", "deadline", "deciding", "decision", "decrease", "deferred", "definite", "delicate", "delivery",
+                "describe", "designer", "detailed", "diabetes", "dialogue", "diameter", "directly", "director", "disabled", "disaster",
+                "disclose", "discount", "discover", "disorder", "disposal", "distance", "distinct", "district", "dividend", "division",
+                "doctrine", "document", "domestic", "dominant", "dominate", "doubtful", "dramatic", "dressing", "dropping", "duration",
+                "dynamics", "earnings", "economic", "educated", "efficacy", "eighteen", "election", "electric", "eligible", "emerging",
+                "emphasis", "employee", "endeavor", "engineer", "enormous", "entirely", "entitled", "equality", "equation", "estimate",
+                "evaluate", "eventual", "everyday", "everyone", "evidence", "exchange", "exciting", "exercise", "explicit", "exposure",
+                "extended", "external", "facility", "familiar", "featured", "feedback", "festival", "finished", "firewall", "flagship",
+                "flexible", "floating", "football", "foothill", "forecast", "foremost", "formerly", "fourteen", "fraction", "franklin",
+                "frequent", "friendly", "frontier", "function", "generate", "generous", "genomics", "goodwill", "governor", "graduate",
+                "graphics", "grateful", "guardian", "guidance", "handling", "hardware", "heritage", "highland", "historic", "homeless",
+                "homepage", "hospital", "humanity", "identify", "identity", "ideology", "imperial", "incident", "included", "increase",
+                "indicate", "indirect", "industry", "infantry", "informal", "informed", "inherent", "initiate", "innocent", "inspired",
+                "instance", "integral", "intended", "interact", "interest", "interior", "internal", "internet", "interval", "intimate",
+                "intranet", "invasion", "involved", "isolated", "judgment", "judicial", "junction", "keyboard", "landlord", "language",
+                "laughter", "learning", "leverage", "lifetime", "lighting", "likewise", "limiting", "literary", "location", "magnetic",
+                "maintain", "majority", "marginal", "marriage", "material", "maturity", "maximize", "meantime", "measured", "medicine",
+                "medieval", "memorial", "merchant", "midnight", "military", "minimize", "minister", "ministry", "minority", "mobility",
+                "modeling", "moderate", "momentum", "monetary", "moreover", "mortgage", "mountain", "mounting", "movement", "multiple",
+                "national", "negative", "nineteen", "northern", "notebook", "numerous", "observer", "occasion", "offering", "official",
+                "offshore", "operator", "opponent", "opposite", "optimism", "optional", "ordinary", "organize", "original", "overcome",
+                "overhead", "overseas", "overview", "painting", "parallel", "parental", "patented", "patience", "peaceful", "periodic",
+                "personal", "persuade", "petition", "physical", "pipeline", "platform", "pleasant", "pleasure", "politics", "portable",
+                "portrait", "position", "positive", "possible", "powerful", "practice", "precious", "pregnant", "presence", "president",
+                "pressure", "previous", "princess", "printing", "priority", "probable", "producer", "progress", "property", "proposal",
+                "prospect", "protocol", "provided", "provider", "province", "publicly", "purchase", "pursuant", "quantity", "question",
+                "rational", "reaction", "received", "receiver", "recovery", "regional", "register", "relation", "relative", "relevant",
+                "reliable", "reliance", "religion", "remember", "renowned", "repeated", "reporter", "republic", "required", "research",
+                "resident", "resigned", "resource", "response", "restrict", "revision", "rigorous", "romantic", "sampling", "scenario",
+                "schedule", "scrutiny", "seasonal", "secondly", "security", "sensible", "sentence", "separate", "sequence", "sergeant",
+                "shipping", "shortage", "shoulder", "simplify", "situated", "slightly", "software", "solution", "somebody", "sometime",
+                "somewhat", "southern", "speaking", "specific", "spectrum", "sporting", "standard", "standing", "sterling", "straight",
+                "strategy", "strength", "striking", "struggle", "stunning", "suburban", "suitable", "superior", "supposed", "surgical",
+                "surprise", "surround", "survival", "sweeping", "swimming", "symbolic", "sympathy", "syndrome", "tactical", "tailored",
+                "takeover", "tangent", "taxation", "taxpayer", "teaching", "tendency", "terminal", "terrible", "thinking", "thirteen",
+                "thorough", "thousand", "together", "tomorrow", "touching", "tracking", "training", "transfer", "traveled", "treasury",
+                "triangle", "tropical", "turnover", "ultimate", "umbrella", "universe", "unlawful", "unlikely", "valuable", "variable",
+                "vertical", "victoria", "violence", "volatile", "warranty", "weakness", "weighted", "whatever", "whenever", "wherever",
+                "wildlife", "wireless", "withdraw", "woodland", "workshop", "yourself"
+            ]
         };
-        
-        let pipes = [];
+
+// Game state variables
+        let playerName = "";
+        let currentWord = "";
+        let currentWordLength = 0;
+        let scrambledLetters = [];
+        let selectedLetters = [];
+        let gameActive = false;
+        let timeLeft = 60;
+        let timerInterval;
         let score = 0;
-        let gameRunning = true;
-        let gamePaused = false;
-        let animationId;
-        let pipeGap = 160;
-        let pipeFrequency = 2200;
-        let lastPipeTime = 0;
-        
-        // Vintage bird image
-        const birdImg = new Image();
-        birdImg.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MCA0MCI+PHBhdGggZmlsbD0iI2ZmYzMwMCIgZD0iTTI1IDVjLTYgMC0xMiAzLTEyIDggMCA1IDYgOCAxMiA4czEyLTMgMTItOGMwLTUtNi04LTEyLTh6Ii8+PGNpcmNsZSBmaWxsPSIjMDAwIiBjeD0iMjAiIGN5PSIxMiIgcj0iMi41Ii8+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIuNSIgZD0iTTEyIDE4YzIuNS0yLjUgNS00IDcuNS00czUgMS41IDcuNSA0Ii8+PHBhdGggZmlsbD0iI2ZmOTkwMCIgZD0iTTMwIDEyYy0xLjUgMC0yLjUgMS41LTIuNSAyLjUgMCAxLjUgMS41IDIuNSAyLjUgMi41IDEuNSAwIDIuNS0xLjUgMi41LTIuNSAwLTEuNS0xLTIuNS0yLjUtMi41eiIvPjwvc3ZnPg==';
-        
-        // Background image
-        const bgImg = new Image();
-        bgImg.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNjAwIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iIzg3Q0VFQiIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAwIiByPSI0MCIgZmlsbD0iI2ZmYzMwMCIgb3BhY2l0eT0iMC4zIi8+PGNpcmNsZSBjeD0iMzUwIiBjeT0iNDAwIiByPSI2MCIgZmlsbD0iI2ZmYzMwMCIgb3BhY2l0eT0iMC4zIi8+PC9zdmc+';
-        
-        // Wood texture for pipes
-        const woodTexture = new Image();
-        woodTexture.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2E4N2Q1YSIvPjxwYXRoIGQ9Ik0yMCAxMEwyMCAyNSIgc3Ryb2tlPSIjODc1ZjJiIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNNDAgMTBMNDAgMjUiIHN0cm9rZT0iIzg3NWYyYiIgc3Ryb2tlLXdpZHRoPSIxIi8+PHBhdGggZD0iTTYwIDEwTDYwIDI1IiBzdHJva2U9IiM4NzVmMmIiIHN0cm9rZS13aWR0aD0iMSIvPjxwYXRoIGQ9Ik04MCAxMEw4MCAyNSIgc3Ryb2tlPSIjODc1ZjJiIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNMzAgMTBMMzAgMjUiIHN0cm9rZT0iIzg3NWYyYiIgc3Ryb2tlLXdpZHRoPSIxIi8+PHBhdGggZD0iTTUwIDEwTDUwIDI1IiBzdHJva2U9IiM4NzVmMmIiIHN0cm9rZS13aWR0aD0iMSIvPjxwYXRoIGQ9Ik03MCAxMEw3MCAyNSIgc3Ryb2tlPSIjODc1ZjJiIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNOTEgMTBMOTEgMjUiIHN0cm9rZT0iIzg3NWYyYiIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9zdmc+';
-        
-        // Event listeners for both desktop and mobile
-        function handleJump() {
-            if (gameRunning && !gamePaused) {
-                bird.velocity = bird.jump;
-            }
-        }
-        
-        // Keyboard controls
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                e.preventDefault();
-                handleJump();
-            }
+        let currentLevel = 1;
+        let paused = false;
+
+        // DOM elements
+        const nameInputScreen = document.getElementById('name-input-screen');
+        const wordLengthScreen = document.getElementById('word-length-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const pauseScreen = document.getElementById('pause-screen');
+        const playerNameInput = document.getElementById('player-name');
+        const displayName = document.getElementById('display-name');
+        const currentPlayerDisplay = document.getElementById('current-player');
+        const letterBoxes = document.getElementById('letter-boxes');
+        const letterOptions = document.getElementById('letter-options');
+        const timeDisplay = document.getElementById('time');
+        const resultMessage = document.getElementById('result-message');
+
+        // Event listeners
+        document.getElementById('start-game').addEventListener('click', startGame);
+        document.getElementById('back-to-name').addEventListener('click', backToName);
+        document.querySelectorAll('.word-length-btn').forEach(btn => {
+            btn.addEventListener('click', () => selectWordLength(parseInt(btn.dataset.length)));
         });
-        
-        // Mouse/touch controls
-        canvas.addEventListener('mousedown', handleJump);
-        canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            handleJump();
-        }, { passive: false });
-        
-        // Button controls
-        pauseBtn.addEventListener('click', togglePause);
-        restartBtn.addEventListener('click', restartGame);
-        playAgainBtn.addEventListener('click', restartGame);
-        quitBtn.addEventListener('click', showQuitConfirm);
-        quitAfterGameBtn.addEventListener('click', showQuitConfirm);
-        confirmQuitBtn.addEventListener('click', quitGame);
-        cancelQuitBtn.addEventListener('click', hideQuitConfirm);
-        
-        // Game functions
-        function togglePause() {
-            gamePaused = !gamePaused;
-            pauseBtn.textContent = gamePaused ? 'Resume' : 'Pause';
-            
-            if (!gamePaused && gameRunning) {
-                animate();
-            }
-        }
-        
-        function showQuitConfirm() {
-            gamePaused = true;
-            quitConfirmScreen.style.display = 'flex';
-        }
-        
-        function hideQuitConfirm() {
-            quitConfirmScreen.style.display = 'none';
-            gamePaused = false;
-            if (gameRunning) {
-                animate();
-            }
-        }
-        
-        function quitGame() {
-            // Reset game state
-            bird.y = 300;
-            bird.velocity = 0;
-            pipes = [];
-            score = 0;
-            gameRunning = false;
-            gamePaused = false;
-            
-            // Hide all game screens
-            gameOverScreen.style.display = 'none';
-            quitConfirmScreen.style.display = 'none';
-            
-            // Show initial state
-            scoreDisplay.textContent = '0';
-            pauseBtn.textContent = 'Pause';
-            lastPipeTime = 0;
-            
-            // Clear the canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
-            
-            // Cancel animation
-            cancelAnimationFrame(animationId);
-        }
-        
-        function restartGame() {
-            // Reset game state
-            bird.y = 300;
-            bird.velocity = 0;
-            pipes = [];
-            score = 0;
-            scoreDisplay.textContent = '0';
-            gameRunning = true;
-            gamePaused = false;
-            gameOverScreen.style.display = 'none';
-            quitConfirmScreen.style.display = 'none';
-            pauseBtn.textContent = 'Pause';
-            lastPipeTime = 0;
-            
-            // Start animation
-            animate();
-        }
-        
-        function createPipe() {
-            const minHeight = 60;
-            const maxHeight = canvas.height - pipeGap - minHeight;
-            const height = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
-            
-            pipes.push({
-                x: canvas.width,
-                y: 0,
-                width: 60,
-                height: height,
-                passed: false
-            });
-            
-            pipes.push({
-                x: canvas.width,
-                y: height + pipeGap,
-                width: 60,
-                height: canvas.height - height - pipeGap,
-                passed: false
+        document.getElementById('check-word').addEventListener('click', checkWord);
+        document.getElementById('next-word').addEventListener('click', nextWord);
+        document.getElementById('pause-game').addEventListener('click', pauseGame);
+        document.getElementById('restart-game').addEventListener('click', restartGame);
+        document.getElementById('resume-game').addEventListener('click', resumeGame);
+        document.getElementById('restart-from-pause').addEventListener('click', restartFromPause);
+        document.getElementById('quit-to-menu').addEventListener('click', quitToMenu);
+
+        // Initialize letter option click handlers
+        function initLetterOptions() {
+            const letters = document.querySelectorAll('.letter-option');
+            letters.forEach(letter => {
+                letter.addEventListener('click', () => selectLetter(letter));
             });
         }
-        
-        function update() {
-            if (gamePaused) return;
-            
-            // Update bird
-            bird.velocity += bird.gravity;
-            bird.y += bird.velocity;
-            
-            // Check for collisions with ground or ceiling
-            if (bird.y + bird.height > canvas.height || bird.y < 0) {
-                gameOver();
+
+        // Start the game
+        function startGame() {
+            const name = playerNameInput.value.trim();
+            if (name === "") {
+                alert("Please enter your name to continue.");
                 return;
             }
             
-            // Create new pipes
-            const currentTime = Date.now();
-            if (currentTime - lastPipeTime > pipeFrequency) {
-                createPipe();
-                lastPipeTime = currentTime;
+            playerName = name;
+            displayName.textContent = name;
+            nameInputScreen.style.display = "none";
+            wordLengthScreen.style.display = "block";
+        }
+
+        // Go back to name input
+        function backToName() {
+            wordLengthScreen.style.display = "none";
+            nameInputScreen.style.display = "block";
+        }
+
+        // Select word length and start the puzzle
+        function selectWordLength(length) {
+            currentWordLength = length;
+            wordLengthScreen.style.display = "none";
+            gameScreen.style.display = "block";
+            currentPlayerDisplay.textContent = playerName;
+            
+            startNewPuzzle();
+            startTimer();
+        }
+
+        // Start a new puzzle
+        function startNewPuzzle() {
+            // Clear previous state
+            selectedLetters = [];
+            resultMessage.textContent = "";
+            resultMessage.className = "result-message";
+            
+            // Select a random word of the chosen length
+            const words = wordDatabase[currentWordLength];
+            currentWord = words[Math.floor(Math.random() * words.length)].toUpperCase();
+            
+            // Scramble the letters
+            scrambledLetters = scrambleWord(currentWord);
+            
+            // Display the puzzle
+            displayPuzzle();
+        }
+
+        // Scramble the letters of a word
+        function scrambleWord(word) {
+            const letters = word.split('');
+            for (let i = letters.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [letters[i], letters[j]] = [letters[j], letters[i]];
+            }
+            return letters;
+        }
+
+        // Display the puzzle
+        function displayPuzzle() {
+            // Clear previous display
+            letterBoxes.innerHTML = "";
+            letterOptions.innerHTML = "";
+            
+            // Create empty letter boxes
+            for (let i = 0; i < currentWordLength; i++) {
+                const box = document.createElement('div');
+                box.className = 'letter-box';
+                box.id = box-${i};
+                letterBoxes.appendChild(box);
             }
             
-            // Update pipes
-            for (let i = 0; i < pipes.length; i++) {
-                pipes[i].x -= 1.2;
+            // Create letter options
+            scrambledLetters.forEach((letter, index) => {
+                const option = document.createElement('div');
+                option.className = 'letter-option';
+                option.textContent = letter;
+                option.id = option-${index};
+                letterOptions.appendChild(option);
+            });
+            
+            // Initialize letter option click handlers
+            initLetterOptions();
+        }
+
+        // Select a letter
+        function selectLetter(letterElement) {
+            if (paused) return;
+            
+            const letter = letterElement.textContent;
+            const index = selectedLetters.length;
+            
+            if (index < currentWordLength) {
+                // Add to selected letters
+                selectedLetters.push(letter);
                 
-                // Check for collisions with pipes
-                if (
-                    bird.x < pipes[i].x + pipes[i].width &&
-                    bird.x + bird.width > pipes[i].x &&
-                    bird.y < pipes[i].y + pipes[i].height &&
-                    bird.y + bird.height > pipes[i].y
-                ) {
-                    gameOver();
-                    return;
-                }
+                // Display in the next empty box
+                document.getElementById(box-${index}).textContent = letter;
                 
-                // Check if bird passed a pipe
-                if (!pipes[i].passed && bird.x > pipes[i].x + pipes[i].width) {
-                    pipes[i].passed = true;
-                    if (i % 2 === 0) {
-                        score++;
-                        scoreDisplay.textContent = score;
-                        
-                        // Update high score if needed
-                        if (score > highScore) {
-                            highScore = score;
-                            highScoreDisplay.textContent = `High Score: ${highScore}`;
-                            localStorage.setItem('flappyBirdHighScore', highScore);
-                        }
+                // Hide the selected letter option
+                letterElement.classList.add('used');
+            }
+        }
+
+        // Check the current word
+        function checkWord() {
+            if (paused) return;
+            
+            if (selectedLetters.length < currentWordLength) {
+                resultMessage.textContent = "Please select all letters first.";
+                resultMessage.className = "result-message incorrect";
+                return;
+            }
+            
+            const guessedWord = selectedLetters.join('');
+            
+            if (guessedWord === currentWord) {
+                resultMessage.textContent = "Correct! Well done!";
+                resultMessage.className = "result-message correct";
+                score += currentWordLength * 10;
+            } else {
+                resultMessage.textContent = Incorrect. The word was: ${currentWord};
+                resultMessage.className = "result-message incorrect";
+            }
+        }
+
+        // Move to next word
+        function nextWord() {
+            if (paused) return;
+            
+            if (resultMessage.textContent === "") {
+                alert("Please check your answer first.");
+                return;
+            }
+            
+            currentLevel++;
+            startNewPuzzle();
+        }
+
+        // Start the timer
+        function startTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 60;
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                if (!paused) {
+                    timeLeft--;
+                    updateTimerDisplay();
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        endGame();
                     }
                 }
-            }
-            
-            // Remove pipes that are off screen
-            pipes = pipes.filter(pipe => pipe.x + pipe.width > 0);
+            }, 1000);
         }
-        
-        function drawPipe(pipe) {
-            // Draw pipe body with wood texture
-            const woodPattern = ctx.createPattern(woodTexture, 'repeat');
-            ctx.fillStyle = woodPattern;
-            ctx.fillRect(pipe.x, pipe.y, pipe.width, pipe.height);
+
+        // Update timer display
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timeDisplay.textContent = ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')};
             
-            // Draw pipe borders
-            ctx.strokeStyle = '#3a271a';
-            ctx.lineWidth = 3;
-            ctx.strokeRect(pipe.x, pipe.y, pipe.width, pipe.height);
-            
-            // Draw pipe details (vintage look)
-            ctx.fillStyle = '#3a271a';
-            ctx.fillRect(pipe.x, pipe.y, pipe.width, 12);
-            ctx.fillRect(pipe.x, pipe.y + pipe.height - 12, pipe.width, 12);
-            
-            // Draw wood grain details
-            ctx.strokeStyle = '#5a3d2b';
-            ctx.lineWidth = 1;
-            for (let i = 0; i < 5; i++) {
-                const x = pipe.x + 5 + (i * 10);
-                ctx.beginPath();
-                ctx.moveTo(x, pipe.y + 15);
-                ctx.lineTo(x, pipe.y + pipe.height - 15);
-                ctx.stroke();
+            if (timeLeft <= 10) {
+                timeDisplay.style.color = "red";
+            } else {
+                timeDisplay.style.color = "#5c4d3c";
             }
         }
-        
-        function draw() {
-            // Clear canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Draw vintage background
-            ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
-            
-            // Draw pipes
-            for (const pipe of pipes) {
-                drawPipe(pipe);
+
+        // Pause the game
+        function pauseGame() {
+            paused = true;
+            gameScreen.style.display = "none";
+            pauseScreen.style.display = "block";
+        }
+
+        // Resume the game
+        function resumeGame() {
+            paused = false;
+            pauseScreen.style.display = "none";
+            gameScreen.style.display = "block";
+        }
+
+        // Restart the game
+        function restartGame() {
+            clearInterval(timerInterval);
+            score = 0;
+            currentLevel = 1;
+            startNewPuzzle();
+            startTimer();
+        }
+
+        // Restart from pause screen
+        function restartFromPause() {
+            paused = false;
+            pauseScreen.style.display = "none";
+            restartGame();
+            gameScreen.style.display = "block";
+        }
+
+        // Quit to main menu
+        function quitToMenu() {
+            paused = false;
+            clearInterval(timerInterval);
+            pauseScreen.style.display = "none";
+            gameScreen.style.display = "none";
+            wordLengthScreen.style.display = "block";
+        }
+
+        // End the game when time runs out
+        function endGame() {
+            gameActive = false;
+            alert(Time's up! Your final score is ${score} points with ${currentLevel - 1} words solved.);
+            quitToMenu();
+        }
+
+        // Allow pressing Enter in name input
+        playerNameInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                startGame();
             }
-            
-            // Draw bird
-            ctx.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
-            
-            // Draw vintage effect overlay
-            ctx.fillStyle = 'rgba(224, 201, 166, 0.1)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
-        
-        function gameOver() {
-            gameRunning = false;
-            gameOverScreen.style.display = 'flex';
-            finalScoreDisplay.textContent = `Score: ${score}`;
-            finalHighScoreDisplay.textContent = `High Score: ${highScore}`;
-            cancelAnimationFrame(animationId);
-        }
-        
-        function animate() {
-            if (!gameRunning || gamePaused) return;
-            
-            update();
-            draw();
-            animationId = requestAnimationFrame(animate);
-        }
-        
-        // Start the game
-        animate();
+        });
     </script>
 </body>
 </html>
