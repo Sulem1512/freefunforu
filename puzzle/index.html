@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vintage Name Puzzle</title>
+    <style>
+        :root {
+            --bg-color: #f0e6d2;
+            --text-color: #463c2a;
+            --button-color: #b4a58c;
+            --button-hover: #9c8c74;
+            --paper-color: #f8f1e5;
+            --border-color: #c0b8a8;
+            --letter-bg: #d8cbb8;
+            --timer-color: #965a3e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-image: url('https://www.transparenttextures.com/patterns/old-paper.png');
+            padding: 10px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 10px auto;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            margin: 10px 0;
+            color: #5a4a3a;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu, .game-screen, .result-screen {
+            background-color: var(--paper-color);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: clamp(15px, 3vw, 30px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .btn {
+            background-color: var(--button-color);
+            color: white;
+            border: none;
+            padding: clamp(8px, 2vw, 12px) clamp(16px, 3vw, 24px);
+            margin: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            min-width: 120px;
+        }
+
+        .btn:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-2px);
+        }
+
+        .word-display {
+            font-size: clamp(1.5rem, 6vw, 2rem);
+            letter-spacing: clamp(5px, 2vw, 10px);
+            margin: clamp(15px, 3vw, 30px) 0;
+            color: #5a4a3a;
+            word-break: break-word;
+        }
+
+        .scrambled-letters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: clamp(5px, 2vw, 10px);
+            margin: clamp(15px, 3vw, 30px) 0;
+        }
+
+        .letter {
+            background-color: var(--letter-bg);
+            color: var(--text-color);
+            width: clamp(40px, 8vw, 50px);
+            height: clamp(40px, 8vw, 50px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            user-select: none;
+        }
+
+        .letter:hover {
+            transform: translateY(-3px);
+            background-color: #c8bba8;
+        }
+
+        .selected-letter {
+            background-color: var(--button-color);
+            color: white;
+        }
+
+        .timer {
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            color: var(--timer-color);
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            min-width: auto;
+        }
+
+        @media (max-width: 600px) {
+            .scrambled-letters {
+                gap: 6px;
+            }
+            .letter {
+                width: 36px;
+                height: 36px;
+                font-size: 1.2rem;
+            }
+            .btn {
+                margin: 5px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .letter {
+                width: 32px;
+                height: 32px;
+                font-size: 1rem;
+            }
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vintage Name Puzzle</h1>
+        
+        <div class="menu" id="menuScreen">
+            <h2>Select Word Length</h2>
+            <div>
+                <button class="btn" onclick="startGame(3)">3 Letters</button>
+                <button class="btn" onclick="startGame(4)">4 Letters</button>
+                <button class="btn" onclick="startGame(5)">5 Letters</button>
+                <button class="btn" onclick="startGame(6)">6 Letters</button>
+                <button class="btn" onclick="startGame(7)">7 Letters</button>
+                <button class="btn" onclick="startGame(8)">8 Letters</button>
+            </div>
+        </div>
+        
+        <div class="game-screen" id="gameScreen" style="display: none;">
+            <div class="game-info">
+                <div class="timer" id="timer">01:00</div>
+                <div id="wordCount">Word 1 of 100</div>
+            </div>
+            <div class="word-display" id="currentWord"></div>
+            <div class="scrambled-letters" id="scrambledLetters"></div>
+            <div class="controls">
+                <button class="btn btn-small" onclick="checkSolution()">Check</button>
+                <button class="btn btn-small" onclick="resetLetters()">Reset</button>
+                <button class="btn btn-small" onclick="backToMenu()">Menu</button>
+            </div>
+        </div>
+        
+        <div class="result-screen" id="resultScreen" style="display: none;">
+            <h2 id="resultTitle">Result</h2>
+            <p id="resultMessage"></p>
+            <div class="controls">
+                <button class="btn" onclick="nextWord()">Next Word</button>
+                <button class="btn" onclick="restartGame()">Restart</button>
+                <button class="btn" onclick="backToMenu()">Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game data - 100 words for each length (3-8 letters)
+        const wordDatabase = {
+            3: [
+                "CAT", "DOG", "SUN", "BAT", "HAT", "BIG", "RED", "CAR", "BED", "TEA",
+                "EGG", "FAN", "GAS", "HOT", "ICE", "JAM", "KEY", "LOW", "MAP", "NET",
+                "OWL", "PEN", "QUO", "RUN", "SIT", "TOP", "USE", "VAN", "WET", "YES",
+                "ZOO", "ACT", "BAD", "CUP", "DIP", "EAR", "FIT", "GAP", "HIT", "JET",
+                "KIT", "LOG", "MIX", "NAP", "OLD", "PET", "QUA", "RIP", "SOY", "TAP",
+                "URN", "VIP", "WAX", "YAK", "ZIP", "ARM", "BIN", "COW", "DOT", "ELF",
+                "FOG", "GUM", "HOP", "INK", "JUG", "KEG", "LID", "MUD", "NOD", "OAR",
+                "PIG", "QUO", "RAT", "SOW", "TIN", "UFO", "VOW", "WIG", "YAM", "ZAP",
+                "ASH", "BET", "CRY", "DIM", "EEL", "FUR", "GEL", "HUG", "ITS", "JOB",
+                "KID", "LAP", "MAT", "NUT", "OAT", "POT", "QUA", "RUG", "SAT", "TUG"
+            ],
+            4: [
+                "BOOK", "FISH", "MOON", "STAR", "TREE", "CAKE", "BALL", "DOOR", "GOLD", "HAND",
+                "JUMP", "KITE", "LION", "NEST", "OPEN", "PARK", "QUIZ", "ROSE", "SOAP", "TENT",
+                "UMBRE", "VASE", "WIND", "XRAY", "YARN", "ZEBRA", "ACID", "BEAN", "COAT", "DUCK",
+                "EAGLE", "FROG", "GOAT", "HARP", "ICON", "JOKE", "KILO", "LAMP", "MELT", "NEON",
+                "OLIVE", "PEAR", "QUAD", "RAIN", "SAND", "TOAD", "UNIX", "VEIL", "WOLF", "YOLK",
+                "ZOOM", "ARCH", "BENT", "CLIP", "DIVE", "ECHO", "FLAT", "GLOW", "HAWK", "IRON",
+                "JAZZ", "KNOB", "LUSH", "MINT", "NOOK", "OPAL", "PLUM", "QUIT", "RUST", "SWAN",
+                "TURF", "UPON", "VAST", "WHIP", "YETI", "ZEST", "ABLE", "BRIM", "COIL", "DUNE",
+                "EPIC", "FLAX", "GIRL", "HOOP", "IDEA", "JOLT", "KERN", "LULL", "MUSE", "NOVA",
+                "OGRE", "POKE", "QUAG", "RIND", "SILK", "TROY", "UGLY", "VIBE", "WONT", "YULE"
+            ],
+            5: [
+                "APPLE", "BRAIN", "CHAIR", "DANCE", "EAGLE", "FLAME", "GHOST", "HONEY", "IGLOO", "JUMBO",
+                "KOALA", "LEMON", "MUSIC", "NIGHT", "OCEAN", "PEARL", "QUILT", "RIVER", "SUNNY", "TIGER",
+                "UNITY", "VIVID", "WATER", "XENON", "YOUTH", "ZEBRA", "ALBUM", "BLINK", "CRISP", "DIZZY",
+                "ELBOW", "FROST", "GLOBE", "HUMOR", "IVORY", "JUMBO", "KARMA", "LUCKY", "MAGIC", "NOISY",
+                "OLIVE", "PIXEL", "QUACK", "ROBIN", "SCOUT", "TREND", "ULTRA", "VOCAL", "WISPY", "YACHT",
+                "ZESTY", "AMBER", "BLUSH", "CROWN", "DWARF", "EMBER", "FLINT", "GRASP", "HINGE", "ITCHY",
+                "JUICY", "KINKY", "LYRIC", "MERRY", "NINJA", "OPERA", "PLUSH", "QUIRK", "RUSTY", "SNOWY",
+                "THUMB", "URBAN", "VAPOR", "WACKY", "XEROX", "YOGIC", "ZIPPY", "AGILE", "BROWN", "CLIMB",
+                "DROLL", "EPOXY", "FJORD", "GLYPH", "HOTLY", "INEPT", "JUMBO", "KAYAK", "LOOPY", "MIXER",
+                "NYMPH", "OZONE", "PROWL", "QUASH", "REBUS", "SWIRL", "TANGY", "UNZIP", "VOWEL", "WHEAT"
+            ],
+            6: [
+                "BANANA", "CIRCLE", "DONKEY", "EAGLES", "FLOWER", "GARDEN", "HORSEY", "ISLAND", "JUNGLE", "KITTEN",
+                "LADDER", "MONKEY", "NATURE", "ORANGE", "PENCIL", "QUEENS", "RABBIT", "SUNSET", "TURTLE", "UNICORN",
+                "VIOLIN", "WIZARD", "XYLOPH", "YELLOW", "ZODIAC", "ANCHOR", "BRIDGE", "CANDLE", "DRAGON", "EXOTIC",
+                "FALCON", "GOSSIP", "HARBOR", "ICICLE", "JOCKEY", "KARATE", "LUXURY", "MIRROR", "NOVICE", "OXYGEN",
+                "PIRATE", "QUARTZ", "REFLUX", "SQUIRM", "TROPIC", "UPHILL", "VICTOR", "WHISKY", "XYSTUS", "YONDER",
+                "ZENITH", "AMBUSH", "BREEZE", "CRYPTIC", "DIPLOMA", "ENZYME", "FLUENT", "GRIZZLY", "HICKORY", "JAGGED",
+                "KETCHUP", "LIMPID", "MUSEUM", "NIMBLE", "OUTCRY", "PHOENIX", "QUIVER", "RASCAL", "SIMPLE", "TEMPEST",
+                "UNIQUE", "VORTEX", "WALRUS", "XYLOID", "YAMMER", "ZEPHYR", "ARCANE", "BLAZER", "COBALT", "DEXTER",
+                "EQUINE", "FROTHY", "GYPSUM", "HUMBLE", "IMPISH", "JOVIAL", "KISMET", "LATHER", "MYRRH", "NEBULA",
+                "OCTAVE", "PLUCKY", "QUAGGA", "RHYTHM", "SQUALL", "TINSEL", "URCHIN", "VAPOUR", "WAMPUM", "YIPPEE"
+            ],
+            7: [
+                "BALLOON", "CABINET", "DIAMOND", "ELEPHANT", "FIREFLY", "GIRAFFE", "HARMONY", "JACKPOT", "KANGARO", "LEOPARD",
+                "MIRACLE", "NOSTRIL", "OCTOPUS", "PENGUIN", "QUALITY", "RAINBOW", "SCORPIO", "TROPICAL", "UMBRELLA", "VICTORY",
+                "WHISPER", "XYLOPHO", "YELLING", "ZIGZAGO", "ABYSSAL", "BLIZZARD", "CRYPTIC", "DOLPHIN", "ECLIPSE", "FLAMINGO",
+                "GLIMPSE", "HORIZON", "INQUIRY", "JUBILEE", "KILOBYT", "LUMINOUS", "MYSTERY", "NUTMEGS", "OPTIMAL", "PARAGON",
+                "QUINTET", "RADICAL", "SYMPHON", "TSUNAMI", "UTOPIAN", "VIBRANT", "WHARFES", "XENOPHO", "YEARLIN", "ZODIACS",
+                "ABSOLVE", "BRILLIG", "CHORTLE", "DYSLEXI", "EPITAPH", "FLAVOUR", "GRIFFIN", "HYDRANT", "IMPLODE", "JACKDAW",
+                "KRYPTON", "LUXURIA", "MALARIA", "NEMESIS", "OCTAGON", "PANDORA", "QUASARS", "REPTILE", "SYRINGE", "TUNDRAS",
+                "UNBOUND", "VESPERS", "WARLOCK", "XEROSIS", "YPERITE", "ZYMURGY", "ACROBAT", "BOUQUET", "CYNICAL", "DEFAULT",
+                "EMPRESS", "FOLKLOR", "GARGOYL", "HABITAT", "ICEBERG", "JOURNEY", "KRYPTIC", "LECTION", "MAGNETO", "NOSTRUM",
+                "ORCHARD", "PALETTE", "QUIBBLE", "REVOLVE", "SQUALOR", "TREACLE", "UNRAVEL", "VULTURE", "WESTERN", "XYLITOL"
+            ],
+            8: [
+                "BUTTERFLY", "CHAMELEON", "DOLPHINS", "ELEPHANTS", "FIREWORK", "GOLDFISH", "HIBISCUS", "JELLYFISH", "KANGAROOS", "LADYBUGS",
+                "MAGNOLIA", "NIRVANAS", "ORCHESTR", "PEACOCKS", "QUESTION", "RAINBOWS", "SCORPION", "TARANTULA", "UMBRELLAS", "VULTURES",
+                "WHALEBON", "XYLOPHON", "YELLOWED", "ZIGZAGED", "ABSOLUTE", "BLIZZARD", "CRYSTALS", "DARKNESS", "ECLIPSES", "FLAMINGOS",
+                "GLADIOLA", "HURRICAN", "ILLUSION", "JACKFRUI", "KILOWATT", "LUMINARY", "MAGNETIC", "NEBULOUS", "OPTIMISM", "PARADOXE",
+                "QUADRANT", "RADIANCE", "SYMPHONY", "TSUNAMIS", "UTOPIANS", "VIBRATES", "WHISPERS", "XENOLITH", "YEARLING", "ZODIACAL",
+                "ABNORMAL", "BRILLIAN", "CHRONICL", "DYNAMITE", "EPICENTR", "FANTASTI", "GORGEOUS", "HARMONIC", "INFINITY", "JOCULARLY",
+                "KALEIDOS", "LUMINOUS", "MYSTERIO", "NATIVITY", "OBSCURED", "PARADIGM", "QUIXOTIC", "REVOLVER", "SYNAPSES", "TREASURE",
+                "UNIVERSE", "VIVACITY", "WONDROUS", "XEROPHYT", "YESTERDA", "ZYGOTENE", "ACOUSTIC", "BOTANICA", "CYNOSURE", "DIAMONDS",
+                "EUPHORIA", "FOLKLORE", "GARDENIA", "HOLISTIC", "ICONOCLA", "JUBILANT", "KINETICS", "LIBERATE", "METAPHOR", "NOSTALGI",
+                "OBSERVED", "PAGANISM", "QUANDARY", "RESONATE", "SERENITY", "TOLERANT", "UNWOVEN", "VANISHED", "WISTERIA", "XYLOIDIN"
+            ]
+        };
+
+        // Game variables
+        let currentWordLength = 3;
+        let currentWordIndex = 0;
+        let currentWord = "";
+        let scrambledWord = "";
+        let selectedLetters = [];
+        let timer;
+        let timeLeft = 60;
+        let score = 0;
+
+        // DOM elements
+        const menuScreen = document.getElementById('menuScreen');
+        const gameScreen = document.getElementById('gameScreen');
+        const resultScreen = document.getElementById('resultScreen');
+        const currentWordDisplay = document.getElementById('currentWord');
+        const scrambledLettersContainer = document.getElementById('scrambledLetters');
+        const timerDisplay = document.getElementById('timer');
+        const wordCountDisplay = document.getElementById('wordCount');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultMessage = document.getElementById('resultMessage');
+
+        // Start game with selected word length
+        function startGame(wordLength) {
+            currentWordLength = wordLength;
+            currentWordIndex = 0;
+            score = 0;
+            loadNextWord();
+            menuScreen.style.display = 'none';
+            gameScreen.style.display = 'block';
+            resultScreen.style.display = 'none';
+        }
+
+        // Load the next word
+        function loadNextWord() {
+            if (currentWordIndex >= 100) {
+                showFinalResults();
+                return;
+            }
+
+            currentWord = wordDatabase[currentWordLength][currentWordIndex];
+            scrambledWord = scrambleWord(currentWord);
+            selectedLetters = [];
+            timeLeft = 60;
+
+            updateDisplay();
+            startTimer();
+        }
+
+        // Scramble the word
+        function scrambleWord(word) {
+            let letters = word.split('');
+            for (let i = letters.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [letters[i], letters[j]] = [letters[j], letters[i]];
+            }
+            return letters.join('');
+        }
+
+        // Update the game display
+        function updateDisplay() {
+            // Update word count
+            wordCountDisplay.textContent = `Word ${currentWordIndex + 1} of 100`;
+
+            // Update scrambled letters display
+            scrambledLettersContainer.innerHTML = '';
+            
+            // Create letter elements
+            for (let i = 0; i < scrambledWord.length; i++) {
+                const letter = scrambledWord[i];
+                const letterElement = document.createElement('div');
+                letterElement.className = 'letter';
+                letterElement.textContent = letter;
+                letterElement.dataset.index = i;
+                
+                // Check if this letter is selected
+                if (selectedLetters.includes(i)) {
+                    letterElement.classList.add('selected-letter');
+                }
+                
+                letterElement.addEventListener('click', () => selectLetter(i));
+                scrambledLettersContainer.appendChild(letterElement);
+            }
+            
+            // Update current word display (showing selected letters in order)
+            let displayWord = '';
+            for (let i = 0; i < selectedLetters.length; i++) {
+                const letterIndex = selectedLetters[i];
+                displayWord += scrambledWord[letterIndex];
+            }
+            currentWordDisplay.textContent = displayWord;
+        }
+
+        // Select a letter
+        function selectLetter(index) {
+            if (selectedLetters.includes(index)) {
+                // Deselect if already selected
+                selectedLetters = selectedLetters.filter(i => i !== index);
+            } else {
+                // Select the letter
+                selectedLetters.push(index);
+            }
+            updateDisplay();
+        }
+
+        // Check the current solution
+        function checkSolution() {
+            clearInterval(timer);
+            
+            let solution = '';
+            for (let i = 0; i < selectedLetters.length; i++) {
+                solution += scrambledWord[selectedLetters[i]];
+            }
+            
+            if (solution === currentWord) {
+                // Correct answer
+                score++;
+                showResult(true);
+            } else {
+                // Wrong answer
+                showResult(false);
+            }
+        }
+
+        // Show result screen
+        function showResult(isCorrect) {
+            gameScreen.style.display = 'none';
+            resultScreen.style.display = 'block';
+            
+            if (isCorrect) {
+                resultTitle.textContent = "Correct!";
+                resultMessage.textContent = `You solved "${currentWord}" correctly!`;
+            } else {
+                resultTitle.textContent = "Try Again";
+                resultMessage.textContent = `The correct word was "${currentWord}".`;
+            }
+        }
+
+        // Show final results after all words
+        function showFinalResults() {
+            gameScreen.style.display = 'none';
+            resultScreen.style.display = 'block';
+            resultTitle.textContent = "Game Complete!";
+            resultMessage.textContent = `You solved ${score} out of 100 ${currentWordLength}-letter words correctly!`;
+            
+            // Change button to go back to menu
+            const nextButton = resultScreen.querySelector('.btn');
+            nextButton.textContent = "Back to Menu";
+            nextButton.onclick = backToMenu;
+        }
+
+        // Move to next word
+        function nextWord() {
+            currentWordIndex++;
+            gameScreen.style.display = 'block';
+            resultScreen.style.display = 'none';
+            loadNextWord();
+        }
+
+        // Restart current word
+        function restartGame() {
+            gameScreen.style.display = 'block';
+            resultScreen.style.display = 'none';
+            loadNextWord();
+        }
+
+        // Reset letters to empty selection
+        function resetLetters() {
+            selectedLetters = [];
+            updateDisplay();
+        }
+
+        // Go back to menu
+        function backToMenu() {
+            clearInterval(timer);
+            menuScreen.style.display = 'block';
+            gameScreen.style.display = 'none';
+            resultScreen.style.display = 'none';
+        }
+
+        // Start the timer
+        function startTimer() {
+            clearInterval(timer);
+            timeLeft = 60;
+            updateTimerDisplay();
+            
+            timer = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    checkSolution();
+                }
+            }, 1000);
+        }
+
+        // Update timer display
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Change color when time is running low
+            if (timeLeft <= 10) {
+                timerDisplay.style.color = 'red';
+            } else {
+                timerDisplay.style.color = 'var(--timer-color)';
+            }
+        }
+
+        // Initialize the game
+        function init() {
+            menuScreen.style.display = 'block';
+            gameScreen.style.display = 'none';
+            resultScreen.style.display = 'none';
+        }
+
+        // Start the game
+        init();
+    </script>
+</body>
+</html>
