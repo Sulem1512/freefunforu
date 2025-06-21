@@ -145,91 +145,203 @@
     This website is not just for fun – it's also a way to boost your child's IQ. Some of the games here are designed to enhance thinking skills. The purpose of this website is not only entertainment but also mental exercise.
   </div>
 <!-- 🛒 Product Section Starts -->
+<style>
+  @media (max-width: 768px) {
+    .product-container {
+      display: none !important;
+    }
+
+    .product-grid {
+      display: grid !important;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      padding: 10px;
+    }
+
+    .product-box {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .product-box img {
+      width: 80px;
+    }
+
+    .product-box p {
+      font-size: 13px;
+      margin: 5px 0;
+    }
+
+    .product-box a {
+      font-size: 12px;
+      background: #f90;
+      color: white;
+      padding: 5px 8px;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+  }
+</style>
+
 <h2 style="text-align: center; font-size: 22px; margin-top: 40px;">🛒 Recommended Products</h2>
 
-<div style="overflow-x: auto; white-space: nowrap; padding: 10px;">
-
-  <!-- Product 1 -->
-  <div style="display: inline-block; width: 160px; margin: 0 8px; border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center;">
+<!-- 🟢 PC/Laptop View: Horizontal Scroll -->
+<div class="product-container" style="overflow-x: auto; white-space: nowrap; padding: 10px;">
+  <!-- Repeat 10 product boxes -->
+  <div class="product-box" style="display: inline-block; width: 160px; margin: 0 8px; border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center;">
     <img src="https://m.media-amazon.com/images/I/61zIKkiMXnL.SY741.jpg" style="width: 100px;">
-    <p style="font-size: 14px;">Zipper T-shirt</p>
-    <p style="color: green; font-size: 13px;">₹499</p>
-    <a href="https://www.amazon.in/London-Hills-Colorblock-Zipper-Tshirt/dp/B0F89CRGBP/?tag=freegamezone1-21" target="_blank" style="font-size: 12px; background: #f90; color: white; padding: 5px 8px; border-radius: 5px; text-decoration: none;">Buy</a>
+    <p>Zipper T-shirt</p>
+    <p style="color: green;">₹499</p>
+    <a href="https://www.amazon.in/London-Hills-Colorblock-Zipper-Tshirt/dp/B0F89CRGBP/?tag=freegamezone1-21" target="_blank">Buy</a>
   </div>
 
-  <!-- Product 2 -->
-  <div style="display: inline-block; width: 160px; margin: 0 8px; border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center;">
+  <div class="product-box" style="display: inline-block; width: 160px; margin: 0 8px; border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center;">
     <img src="https://m.media-amazon.com/images/I/51QIOviv7AL.SY695.jpg" style="width: 100px;">
-    <p style="font-size: 14px;">Puma Sneakers</p>
-    <p style="color: green; font-size: 13px;">₹1799</p>
-    <a href="https://www.amazon.in/Puma-Unisex-Adult-Rickie-White-Black-Sneaker/dp/B09L5LWGMT/?tag=freegamezone1-21" target="_blank" style="font-size: 12px; background: #f90; color: white; padding: 5px 8px; border-radius: 5px; text-decoration: none;">Buy</a>
+    <p>Puma Sneakers</p>
+    <p style="color: green;">₹1799</p>
+    <a href="https://www.amazon.in/Puma-Unisex-Adult-Rickie-White-Black-Sneaker/dp/B09L5LWGMT/?tag=freegamezone1-21" target="_blank">Buy</a>
   </div>
 
-  <!-- Product 3 -->
-  <div style="display: inline-block; width: 160px; margin: 0 8px; border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center;">
+  <div class="product-box" style="display: inline-block; width: 160px; margin: 0 8px; border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center;">
     <img src="https://m.media-amazon.com/images/I/61mdAQ7FAML.SY879.jpg" style="width: 100px;">
-    <p style="font-size: 14px;">Henley T-shirt</p>
-    <p style="color: green; font-size: 13px;">₹349</p>
-    <a href="https://www.amazon.in/BULLMER-Cotton-Henley-Chinese-Collar/dp/B0B4NPHR1V/?tag=freegamezone1-21" target="_blank" style="font-size: 12px; background: #f90; color: white; padding: 5px 8px; border-radius: 5px; text-decoration: none;">Buy</a>
+    <p>Henley T-shirt</p>
+    <p style="color: green;">₹349</p>
+    <a href="https://www.amazon.in/BULLMER-Cotton-Henley-Chinese-Collar/dp/B0B4NPHR1V/?tag=freegamezone1-21" target="_blank">Buy</a>
   </div>
 
-  <!-- Product 4 -->
-  <div style="display: inline-block; width: 160px; margin: 0 8px; border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center;">
+  <div class="product-box" style="display: inline-block; width: 160px; margin: 0 8px; border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center;">
     <img src="https://m.media-amazon.com/images/I/71Pgwu8lJuL.SY879.jpg" style="width: 100px;">
-    <p style="font-size: 14px;">Waterproof Jacket</p>
-    <p style="color: green; font-size: 13px;">₹899</p>
-    <a href="https://www.amazon.in/KOLAR-Reversible-WaterProof-Crafted-Material/dp/B0D8XNTYC2/?tag=freegamezone1-21" target="_blank" style="font-size: 12px; background: #f90; color: white; padding: 5px 8px; border-radius: 5px; text-decoration: none;">Buy</a>
+    <p>Waterproof Jacket</p>
+    <p style="color: green;">₹899</p>
+    <a href="https://www.amazon.in/KOLAR-Reversible-WaterProof-Crafted-Material/dp/B0D8XNTYC2/?tag=freegamezone1-21" target="_blank">Buy</a>
   </div>
 
-  <!-- Product 5 -->
-  <div style="display: inline-block; width: 160px; margin: 0 8px; border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center;">
+  <div class="product-box" style="display: inline-block; width: 160px; margin: 0 8px; border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center;">
     <img src="https://m.media-amazon.com/images/I/61VM5dsvGHL.SX569.jpg" style="width: 100px;">
-    <p style="font-size: 14px;">Plastic Bat</p>
-    <p style="color: green; font-size: 13px;">₹499</p>
-    <a href="https://www.amazon.in/Boldfit-Cricket-Plastic-Tournament-Standard/dp/B0C2VPCHCJ/?tag=freegamezone1-21" target="_blank" style="font-size: 12px; background: #f90; color: white; padding: 5px 8px; border-radius: 5px; text-decoration: none;">Buy</a>
+    <p>Plastic Bat</p>
+    <p style="color: green;">₹499</p>
+    <a href="https://www.amazon.in/Boldfit-Cricket-Plastic-Tournament-Standard/dp/B0C2VPCHCJ/?tag=freegamezone1-21" target="_blank">Buy</a>
   </div>
 
-  <!-- Product 6 -->
-  <div style="display: inline-block; width: 160px; margin: 0 8px; border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center;">
+  <div class="product-box" style="display: inline-block; width: 160px; margin: 0 8px; border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center;">
     <img src="https://m.media-amazon.com/images/I/61+OnW2GPGL.SY741.jpg" style="width: 100px;">
-    <p style="font-size: 14px;">Henley Cotton T-shirt</p>
-    <p style="color: green; font-size: 13px;">₹399</p>
-    <a href="https://www.amazon.in/BULLMER-Cotton-Henley-Chinese-Collar/dp/B0B4NKV7R7/?tag=freegamezone1-21" target="_blank" style="font-size: 12px; background: #f90; color: white; padding: 5px 8px; border-radius: 5px; text-decoration: none;">Buy</a>
+    <p>Henley Cotton T-shirt</p>
+    <p style="color: green;">₹399</p>
+    <a href="https://www.amazon.in/BULLMER-Cotton-Henley-Chinese-Collar/dp/B0B4NKV7R7/?tag=freegamezone1-21" target="_blank">Buy</a>
   </div>
 
-  <!-- Product 7 -->
-  <div style="display: inline-block; width: 160px; margin: 0 8px; border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center;">
+  <div class="product-box" style="display: inline-block; width: 160px; margin: 0 8px; border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center;">
     <img src="https://m.media-amazon.com/images/I/71hybZjlzxL.SY695.jpg" style="width: 100px;">
-    <p style="font-size: 14px;">Black Solid T-shirt</p>
-    <p style="color: green; font-size: 13px;">₹279</p>
-    <a href="https://www.amazon.in/gp/product/B0CJQ9DB16/?tag=freegamezone1-21" target="_blank" style="font-size: 12px; background: #f90; color: white; padding: 5px 8px; border-radius: 5px; text-decoration: none;">Buy</a>
+    <p>Black Solid T-shirt</p>
+    <p style="color: green;">₹279</p>
+    <a href="https://www.amazon.in/gp/product/B0CJQ9DB16/?tag=freegamezone1-21" target="_blank">Buy</a>
   </div>
 
-  <!-- Product 8 -->
-  <div style="display: inline-block; width: 160px; margin: 0 8px; border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center;">
+  <div class="product-box" style="display: inline-block; width: 160px; margin: 0 8px; border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center;">
     <img src="https://m.media-amazon.com/images/I/71IbQaxEJzL.SX569.jpg" style="width: 100px;">
-    <p style="font-size: 14px;">Football</p>
-    <p style="color: green; font-size: 13px;">₹699</p>
-    <a href="https://www.amazon.in/SLOVIC-Professional-Football-Foot-Ball-Artificial/dp/B0DWXKZK8B/?tag=freegamezone1-21" target="_blank" style="font-size: 12px; background: #f90; color: white; padding: 5px 8px; border-radius: 5px; text-decoration: none;">Buy</a>
+    <p>Football</p>
+    <p style="color: green;">₹699</p>
+    <a href="https://www.amazon.in/SLOVIC-Professional-Football-Foot-Ball-Artificial/dp/B0DWXKZK8B/?tag=freegamezone1-21" target="_blank">Buy</a>
   </div>
 
-  <!-- Product 9 -->
-  <div style="display: inline-block; width: 160px; margin: 0 8px; border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center;">
+  <div class="product-box" style="display: inline-block; width: 160px; margin: 0 8px; border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center;">
     <img src="https://m.media-amazon.com/images/I/51ZWI+GJMqL.jpg" style="width: 100px;">
-    <p style="font-size: 14px;">Lavender Oversize Tee</p>
-    <p style="color: green; font-size: 13px;">₹499</p>
-    <a href="https://www.amazon.in/ABSOLUTE-DEFENSE-Oversize-Stylish-Lavender/dp/B0DY5SC6N5/?tag=freegamezone1-21" target="_blank" style="font-size: 12px; background: #f90; color: white; padding: 5px 8px; border-radius: 5px; text-decoration: none;">Buy</a>
+    <p>Lavender Oversize Tee</p>
+    <p style="color: green;">₹499</p>
+    <a href="https://www.amazon.in/ABSOLUTE-DEFENSE-Oversize-Stylish-Lavender/dp/B0DY5SC6N5/?tag=freegamezone1-21" target="_blank">Buy</a>
   </div>
 
-  <!-- Product 10 -->
-  <div style="display: inline-block; width: 160px; margin: 0 8px; border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center;">
+  <div class="product-box" style="display: inline-block; width: 160px; margin: 0 8px; border: 1px solid #ccc; border-radius: 8px; padding: 10px; text-align: center;">
     <img src="https://m.media-amazon.com/images/I/81Mlcas5bOL.SX679.jpg" style="width: 100px;">
-    <p style="font-size: 14px;">Hand Grip Strengthener</p>
-    <p style="color: green; font-size: 13px;">₹299</p>
-    <a href="https://www.amazon.in/dp/B0CHS3DYZ6/?tag=freegamezone1-21" target="_blank" style="font-size: 12px; background: #f90; color: white; padding: 5px 8px; border-radius: 5px; text-decoration: none;">Buy</a>
+    <p>Hand Grip Strengthener</p>
+    <p style="color: green;">₹299</p>
+    <a href="https://www.amazon.in/dp/B0CHS3DYZ6/?tag=freegamezone1-21" target="_blank">Buy</a>
+  </div>
+</div>
+
+<!-- 🔵 Mobile View: 5x2 Grid -->
+<div class="product-grid" style="display: none;">
+  <!-- 10 product boxes for phone -->
+  <!-- Repeat same products as above -->
+  <div class="product-box">
+    <img src="https://m.media-amazon.com/images/I/61zIKkiMXnL.SY741.jpg">
+    <p>Zipper T-shirt</p>
+    <p style="color: green;">₹499</p>
+    <a href="https://www.amazon.in/London-Hills-Colorblock-Zipper-Tshirt/dp/B0F89CRGBP/?tag=freegamezone1-21" target="_blank">Buy</a>
   </div>
 
+  <div class="product-box">
+    <img src="https://m.media-amazon.com/images/I/51QIOviv7AL.SY695.jpg">
+    <p>Puma Sneakers</p>
+    <p style="color: green;">₹1799</p>
+    <a href="https://www.amazon.in/Puma-Unisex-Adult-Rickie-White-Black-Sneaker/dp/B09L5LWGMT/?tag=freegamezone1-21" target="_blank">Buy</a>
+  </div>
+
+  <div class="product-box">
+    <img src="https://m.media-amazon.com/images/I/61mdAQ7FAML.SY879.jpg">
+    <p>Henley T-shirt</p>
+    <p style="color: green;">₹349</p>
+    <a href="https://www.amazon.in/BULLMER-Cotton-Henley-Chinese-Collar/dp/B0B4NPHR1V/?tag=freegamezone1-21" target="_blank">Buy</a>
+  </div>
+
+  <div class="product-box">
+    <img src="https://m.media-amazon.com/images/I/71Pgwu8lJuL.SY879.jpg">
+    <p>Waterproof Jacket</p>
+    <p style="color: green;">₹899</p>
+    <a href="https://www.amazon.in/KOLAR-Reversible-WaterProof-Crafted-Material/dp/B0D8XNTYC2/?tag=freegamezone1-21" target="_blank">Buy</a>
+  </div>
+
+  <div class="product-box">
+    <img src="https://m.media-amazon.com/images/I/61VM5dsvGHL.SX569.jpg">
+    <p>Plastic Bat</p>
+    <p style="color: green;">₹499</p>
+    <a href="https://www.amazon.in/Boldfit-Cricket-Plastic-Tournament-Standard/dp/B0C2VPCHCJ/?tag=freegamezone1-21" target="_blank">Buy</a>
+  </div>
+
+  <div class="product-box">
+    <img src="https://m.media-amazon.com/images/I/61+OnW2GPGL.SY741.jpg">
+    <p>Henley Cotton T-shirt</p>
+    <p style="color: green;">₹399</p>
+    <a href="https://www.amazon.in/BULLMER-Cotton-Henley-Chinese-Collar/dp/B0B4NKV7R7/?tag=freegamezone1-21" target="_blank">Buy</a>
+  </div>
+
+  <div class="product-box">
+    <img src="https://m.media-amazon.com/images/I/71hybZjlzxL.SY695.jpg">
+    <p>Black Solid T-shirt</p>
+    <p style="color: green;">₹279</p>
+    <a href="https://www.amazon.in/gp/product/B0CJQ9DB16/?tag=freegamezone1-21" target="_blank">Buy</a>
+  </div>
+
+  <div class="product-box">
+    <img src="https://m.media-amazon.com/images/I/71IbQaxEJzL.SX569.jpg">
+    <p>Football</p>
+    <p style="color: green;">₹699</p>
+    <a href="https://www.amazon.in/SLOVIC-Professional-Football-Foot-Ball-Artificial/dp/B0DWXKZK8B/?tag=freegamezone1-21" target="_blank">Buy</a>
+  </div>
+
+  <div class="product-box">
+    <img src="https://m.media-amazon.com/images/I/51ZWI+GJMqL.jpg">
+    <p>Lavender Oversize Tee</p>
+    <p style="color: green;">₹499</p>
+    <a href="https://www.amazon.in/ABSOLUTE-DEFENSE-Oversize-Stylish-Lavender/dp/B0DY5SC6N5/?tag=freegamezone1-21" target="_blank">Buy</a>
+  </div>
+
+  <div class="product-box">
+    <img src="https://m.media-amazon.com/images/I/81Mlcas5bOL.SX679.jpg">
+    <p>Hand Grip Strengthener</p>
+    <p style="color: green;">₹299</p>
+    <a href="https://www.amazon.in/dp/B0CHS3DYZ6/?tag=freegamezone1-21" target="_blank">Buy</a>
+  </div>
 </div>
+
+<script>
+  if (window.innerWidth <= 768) {
+    document.querySelector('.product-container').style.display = 'none';
+    document.querySelector('.product-grid').style.display = 'grid';
+  }
+</script>
 <!-- 🛒 Product Section Ends -->
 
 </body>
