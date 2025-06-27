@@ -10,43 +10,41 @@
 </script>
 <title>🎮 My Game Zone</title>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
-    text-align: center;
-    padding-bottom: 50px;
-    margin: 0;
-  }h1 { margin-top: 30px; color: #333; font-size: 2.5rem; }
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); text-align: center; padding-bottom: 50px; margin: 0; }
 
-.cta-top { font-size: 18px; color: #444; margin-top: 10px; margin-bottom: 30px; }
+h1 { margin-top: 30px; color: #333; font-size: 2.8rem; font-weight: 700; }
+
+.cta-top { font-size: 18px; color: #555; margin-top: 10px; margin-bottom: 30px; }
 
 .game-container { display: flex; flex-wrap: wrap; justify-content: center; padding: 20px; }
 
-.game { width: 200px; margin: 15px; background: #fff; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: transform 0.3s, box-shadow 0.3s; }
+.game { width: 200px; margin: 15px; background: #fff; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.3s, box-shadow 0.3s; }
 
 .game:hover { transform: scale(1.05); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
 
 .game img { width: 100%; height: auto; border-radius: 15px 15px 0 0; }
 
-.game-name { margin: 10px; font-size: 18px; font-weight: bold; color: #222; }
+.game-name { margin: 10px; font-size: 18px; font-weight: 600; color: #222; }
 
 .note { margin-top: 50px; font-size: 18px; font-weight: 500; color: #444; max-width: 800px; padding: 0 20px; margin-left: auto; margin-right: auto; display: block; }
 
-.exclusive-banner { background: linear-gradient(90deg, #ff7e5f, #feb47b); color: white; padding: 16px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: bold; margin: 35px 15px 20px 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+.exclusive-banner { background: linear-gradient(90deg, #ff7e5f, #feb47b); color: white; padding: 16px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: 600; margin: 35px 15px 20px 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
 
 .affiliate-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; padding: 20px; justify-items: center; text-align: center; }
 
-.affiliate-item { background: #fff; padding: 12px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.3s, box-shadow 0.3s; width: 140px; }
+.affiliate-item { background: #fff; padding: 12px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); transition: transform 0.3s, box-shadow 0.3s; width: 140px; }
 
 .affiliate-item:hover { transform: scale(1.05); box-shadow: 0 8px 20px rgba(0,0,0,0.25); }
 
 .affiliate-item img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 8px; }
 
-.affiliate-item div { font-size: 16px; font-weight: bold; color: #333; margin-bottom: 6px; }
+.affiliate-item div { font-size: 16px; font-weight: 600; color: #333; margin-bottom: 6px; }
 
-.affiliate-btn { display: inline-block; background: #ff7e5f; color: white; padding: 6px 10px; border-radius: 6px; font-size: 14px; text-decoration: none; margin-top: 4px; }
+.affiliate-btn { display: inline-block; background: #ff7e5f; color: white; padding: 6px 12px; border-radius: 6px; font-size: 14px; font-weight: 500; text-decoration: none; margin-top: 4px; transition: background 0.3s; }
 
-@media (max-width: 768px) { .game { width: 45%; } h1 { font-size: 2rem; } }
+.affiliate-btn:hover { background: #e45a42; }
+
+@media (max-width: 768px) { .game { width: 45%; } h1 { font-size: 2.2rem; } }
 
 @media (max-width: 480px) { .game { width: 90%; margin: 10px auto; } .note { font-size: 16px; } } </style>
 
@@ -56,41 +54,21 @@
 <div class="cta-top">Play Free Games & Boost Your IQ — No Download Needed!</div>
 <div class="game-container">
   <div class="game">
-    <a href="balloon/">
-      <img src="balloon/OIG2.whL.jpeg" alt="Balloon Game">
-      <div class="game-name">🎈 Balloon Blast</div>
-    </a>
+    <a href="balloon/"><img src="balloon/OIG2.whL.jpeg" alt="Balloon Game"><div class="game-name">🎈 Balloon Blast</div></a>
   </div>
   <div class="game">
-    <a href="tic-tac/">
-      <img src="tic-tac/tic-tac.jpeg" alt="Tic Tac Toe">
-      <div class="game-name">❌⭕ Tic Tac Master</div>
-    </a>
+    <a href="tic-tac/"><img src="tic-tac/tic-tac.jpeg" alt="Tic Tac Toe"><div class="game-name">❌⭕ Tic Tac Master</div></a>
   </div>
   <div class="game">
-    <a href="puzzle/">
-      <img src="puzzle/OIG4.jpeg" alt="Puzzle Game">
-      <div class="game-name">🧩 Puzzle Mania</div>
-    </a>
+    <a href="puzzle/"><img src="puzzle/OIG4.jpeg" alt="Puzzle Game"><div class="game-name">🧩 Puzzle Mania</div></a>
   </div>
   <div class="game">
-    <a href="quiz/">
-      <img src="quiz/quizicon.jpeg" alt="Quiz Game">
-      <div class="game-name">📚 Quiz Champion</div>
-    </a>
+    <a href="quiz/"><img src="quiz/quizicon.jpeg" alt="Quiz Game"><div class="game-name">📚 Quiz Champion</div></a>
   </div>
   <div class="game">
-    <a href="flappy-bird/">
-      <img src="flappy-bird/OIG1.jpeg" alt="Flappy Bird">
-      <div class="game-name">🐤 Flappy Flyer</div>
-    </a>
+    <a href="flappy-bird/"><img src="flappy-bird/OIG1.jpeg" alt="Flappy Bird"><div class="game-name">🐤 Flappy Flyer</div></a>
   </div>
-</div><div class="note">
-  This website is not just for fun — it's also a way to boost your child's IQ. Some games are designed to enhance thinking skills.
-</div><div class="exclusive-banner">
-  🌟 Shop Directly from Official Apps with Ongoing Discounts — All Links Verified & Genuine.
-</div><div class="affiliate-grid">
-  <!-- 18 affiliate links ready -->
+</div><div class="note">This website is not just for fun — it's also a way to boost your child's IQ. Some games are designed to enhance thinking skills.</div><div class="exclusive-banner">🌟 Shop Directly from Official Apps with Ongoing Discounts — All Links Verified & Genuine.</div><div class="affiliate-grid">
   <div class="affiliate-item"><a href="https://www.amazon.in/?tag=freegamezone1-21" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"><div>Amazon</div><span class="affiliate-btn">Shop Now</span></a></div>
   <div class="affiliate-item"><a href="https://fktr.in/klG5dA5" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Flipkart_Logo_as_of_2025.png"><div>Flipkart</div><span class="affiliate-btn">Explore Deals</span></a></div>
   <div class="affiliate-item"><a href="https://myntr.it/dh7AKUB" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/b/bc/Myntra_Logo.png"><div>Myntra</div><span class="affiliate-btn">Fashion Offers</span></a></div>
