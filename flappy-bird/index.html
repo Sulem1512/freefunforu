@@ -159,7 +159,6 @@
         <div id="score-display">0</div>
         <div id="controls">
             <button id="pause-btn">Pause</button>
-            <button id="restart-btn">Restart</button>
         </div>
         <div id="game-over">
             <h1>Game Over</h1>
@@ -176,7 +175,6 @@
     const scoreDisplay = document.getElementById('score-display');
     const highScoreDisplay = document.getElementById('high-score-display');
     const pauseBtn = document.getElementById('pause-btn');
-    const restartBtn = document.getElementById('restart-btn');
     const gameOverScreen = document.getElementById('game-over');
     const finalScoreDisplay = document.getElementById('final-score');
     const finalHighScoreDisplay = document.getElementById('final-high-score');
@@ -245,11 +243,12 @@
 
     // Button controls
     pauseBtn.addEventListener('click', togglePause);
-    restartBtn.addEventListener('click', restartGame);
     playAgainBtn.addEventListener('click', restartGame);
 
     // Game functions
     function togglePause() {
+        if (gameOverTriggered) return;
+        
         gamePaused = !gamePaused;
         pauseBtn.textContent = gamePaused ? 'Resume' : 'Pause';
 
@@ -271,6 +270,7 @@
         gameOverTriggered = false;
         gameOverScreen.style.display = 'none';
         pauseBtn.textContent = 'Pause';
+        pauseBtn.style.display = 'block';
         lastPipeTime = 0;
 
         // Start animation
@@ -330,9 +330,8 @@
 
             // Check for collisions with pipes - more precise collision detection
             if (!gameOverTriggered && checkCollision(bird, pipes[i])) {
-                gameOverTriggered = true;
-                bird.velocity = 2; // Make bird fall after hitting pipe
-                bird.rotation = 90; // Make bird face downward
+                gameOver();
+                return;
             }
 
             // Check if bird passed a pipe
@@ -428,10 +427,17 @@
     }
 
     function gameOver() {
+        gameOverTriggered = true;
         gameRunning = false;
-        gameOverScreen.style.display = 'flex';
-        finalScoreDisplay.textContent = `Score: ${score}`;
-        finalHighScoreDisplay.textContent = `High Score: ${highScore}`;
+        pauseBtn.style.display = 'none';
+        
+        // Show game over screen after a small delay
+        setTimeout(() => {
+            gameOverScreen.style.display = 'flex';
+            finalScoreDisplay.textContent = `Score: ${score}`;
+            finalHighScoreDisplay.textContent = `High Score: ${highScore}`;
+        }, 500);
+        
         cancelAnimationFrame(animationId);
     }
 
