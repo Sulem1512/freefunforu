@@ -1,90 +1,92 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
 <meta name="verify-admitad" content="489fc44418" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P34D10VQ4L"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P34D10VQ4L');
+</script>
 <title>🎮 My Game Zone</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #ffe0cc, #ffcccc);
-    text-align: center;
-    padding-bottom: 50px;
-    margin: 0;
-  }h1 { margin-top: 20px; color: #333; }
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); text-align: center; padding-bottom: 50px; margin: 0; }
 
-.tagline { font-size: 18px; color: #555; margin-bottom: 20px; }
+h1 { margin-top: 30px; color: #333; font-size: 2.8rem; font-weight: 700; }
+
+.cta-top { font-size: 18px; color: #555; margin-top: 10px; margin-bottom: 30px; }
 
 .game-container { display: flex; flex-wrap: wrap; justify-content: center; padding: 20px; }
 
-.game { width: 180px; margin: 15px; background: #fff; border-radius: 12px; box-shadow: 0 0 15px rgba(0,0,0,0.2); transition: transform 0.3s; }
+.game { width: 200px; margin: 15px; background: #fff; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.3s, box-shadow 0.3s; }
 
-.game:hover { transform: scale(1.05); }
+.game:hover { transform: scale(1.05); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
 
-.game img { width: 100%; height: auto; border-radius: 12px 12px 0 0; }
+.game img { width: 100%; height: auto; border-radius: 15px 15px 0 0; }
 
-.game-name { margin: 10px 0; font-size: 18px; font-weight: bold; color: #222; }
+.game-name { margin: 10px; font-size: 18px; font-weight: 600; color: #222; }
 
-.exclusive-banner { background: linear-gradient(90deg, #ff7e5f, #feb47b); color: white; padding: 14px; border-radius: 8px; margin: 25px 15px 15px 15px; font-weight: bold; }
+.note { margin-top: 50px; font-size: 18px; font-weight: 500; color: #444; max-width: 800px; padding: 0 20px; margin-left: auto; margin-right: auto; display: block; }
 
-.affiliate-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 15px; text-align: center; }
+.exclusive-banner { background: linear-gradient(90deg, #ff7e5f, #feb47b); color: white; padding: 16px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: 600; margin: 35px 15px 20px 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
 
-.affiliate-item { background: #fff; padding: 10px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); transition: transform 0.3s; }
+.affiliate-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; padding: 20px; justify-items: center; text-align: center; }
 
-.affiliate-item:hover { transform: scale(1.05); }
+.affiliate-item { background: #fff; padding: 12px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); transition: transform 0.3s, box-shadow 0.3s; width: 140px; }
+
+.affiliate-item:hover { transform: scale(1.05); box-shadow: 0 8px 20px rgba(0,0,0,0.25); }
 
 .affiliate-item img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 8px; }
 
-.affiliate-item div { margin-top: 5px; font-weight: 600; }
+.affiliate-item div { font-size: 16px; font-weight: 600; color: #333; margin-bottom: 6px; }
 
-.note { margin: 30px auto; max-width: 800px; color: #555; padding: 0 20px; font-size: 16px; }
+.affiliate-btn { display: inline-block; background: #ff7e5f; color: white; padding: 6px 12px; border-radius: 6px; font-size: 14px; font-weight: 500; text-decoration: none; margin-top: 4px; transition: background 0.3s; }
 
-@media (max-width: 768px) { .game { width: 42%; } }
+.affiliate-btn:hover { background: #e45a42; }
 
-@media (max-width: 480px) { .game { width: 90%; } }
+@media (max-width: 768px) { .game { width: 45%; } h1 { font-size: 2.2rem; } }
 
-/* Pop-Up Styling */ .popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.5); padding: 20px; text-align: center; max-width: 300px; z-index: 9999; display: none; }
-
-.popup button { margin-top: 15px; padding: 8px 15px; background: #ff7e5f; color: white; border: none; border-radius: 5px; cursor: pointer; }
-
-.popup button:hover { background: #e65b4d; } </style>
+@media (max-width: 480px) { .game { width: 90%; margin: 10px auto; } .note { font-size: 16px; } } </style>
 
 </head>
 <body>
 <h1>🎮 Welcome to My Game Zone</h1>
-<div class="tagline">Play Free Games & Boost Your IQ — No Download Needed!</div><div class="game-container">
-  <!-- Example Game Card -->
+<div class="cta-top">Play Free Games & Boost Your IQ — No Download Needed!</div>
+<div class="game-container">
   <div class="game">
-    <a href="balloon/">
-      <img src="balloon/OIG2.whL.jpeg" alt="Balloon Game">
-      <div class="game-name">🎈 Balloon Blast</div>
-    </a>
+    <a href="balloon/"><img src="balloon/OIG2.whL.jpeg" alt="Balloon Game"><div class="game-name">🎈 Balloon Blast</div></a>
   </div>
-  <!-- More games can be added similarly -->
-</div><div class="note">
-This website offers entertainment & IQ boosting games. Explore games and exclusive offers below!
-</div><div class="exclusive-banner">🌟 Verified Official Apps & Offers — Support Us By Shopping!
-</div><div class="affiliate-grid">
-  <div class="affiliate-item">
-    <a href="https://www.amazon.in/?tag=freegamezone1-21" target="_blank">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/905px-Amazon_logo.svg.png" alt="Amazon">
-      <div>Amazon</div>
-    </a>
+  <div class="game">
+    <a href="tic-tac/"><img src="tic-tac/tic-tac.jpeg" alt="Tic Tac Toe"><div class="game-name">❌⭕ Tic Tac Master</div></a>
   </div>
-  <!-- More affiliate items similarly -->
-</div><!-- Pop-Up Structure --><div id="popup1" class="popup">
-  <strong>🎉 Exclusive Deals Available!</strong>
-  <br>Shop Now & Support Us.
-  <br><button onclick="closePopup('popup1')">Close</button>
-</div><script>
-// Show Pop-Up after 5 seconds
-setTimeout(() => {
-  document.getElementById('popup1').style.display = 'block';
-}, 5000);
-
-function closePopup(id) {
-  document.getElementById(id).style.display = 'none';
-}
-</script></body>
+  <div class="game">
+    <a href="puzzle/"><img src="puzzle/OIG4.jpeg" alt="Puzzle Game"><div class="game-name">🧩 Puzzle Mania</div></a>
+  </div>
+  <div class="game">
+    <a href="quiz/"><img src="quiz/quizicon.jpeg" alt="Quiz Game"><div class="game-name">📚 Quiz Champion</div></a>
+  </div>
+  <div class="game">
+    <a href="flappy-bird/"><img src="flappy-bird/OIG1.jpeg" alt="Flappy Bird"><div class="game-name">🐤 Flappy Flyer</div></a>
+  </div>
+</div><div class="note">This website is not just for fun — it's also a way to boost your child's IQ. Some games are designed to enhance thinking skills.</div><div class="exclusive-banner">🌟 Shop Directly from Official Apps with Ongoing Discounts — All Links Verified & Genuine.</div><div class="affiliate-grid">
+  <div class="affiliate-item"><a href="https://www.amazon.in/?tag=freegamezone1-21" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"><div>Amazon</div><span class="affiliate-btn">Shop Now</span></a></div>
+  <div class="affiliate-item"><a href="https://fktr.in/klG5dA5" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Flipkart_Logo_as_of_2025.png"><div>Flipkart</div><span class="affiliate-btn">Explore Deals</span></a></div>
+  <div class="affiliate-item"><a href="https://myntr.it/dh7AKUB" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/b/bc/Myntra_Logo.png"><div>Myntra</div><span class="affiliate-btn">Fashion Offers</span></a></div>
+  <div class="affiliate-item"><a href="https://ajiio.in/im7FbxQ" target="_blank"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSO8Zwy7WIrW3NWpGvIpSTzaI9v2HbyIG1G45jTD0cKZOgnkibCXwaI"><div>Ajio</div><span class="affiliate-btn">Top Picks</span></a></div>
+  <div class="affiliate-item"><a href="https://bitli.in/kEfpcVk" target="_blank"><img src="https://images.seeklogo.com/logo-png/38/1/firstcry-logo-png_seeklogo-386678.png"><div>FirstCry</div><span class="affiliate-btn">Kids Store</span></a></div>
+  <div class="affiliate-item"><a href="https://bitli.in/f8Y9bsL" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d6/Croma_logo.png"><div>Croma</div><span class="affiliate-btn">Electronics</span></a></div>
+  <div class="affiliate-item"><a href="https://bitli.in/gWNyiRB" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/en/5/54/JioMart_logo.svg"><div>JioMart</div><span class="affiliate-btn">Shop Grocery</span></a></div>
+  <div class="affiliate-item"><a href="https://bitli.in/xjb4tC9" target="_blank"><img src="https://etimg.etb2bimg.com/photo/99234903.cms"><div>Noise</div><span class="affiliate-btn">Best Audio</span></a></div>
+  <div class="affiliate-item"><a href="https://bitli.in/harC9PS" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Fastrack_logo.png"><div>Fastrack</div><span class="affiliate-btn">Trendy Watches</span></a></div>
+  <div class="affiliate-item"><a href="https://bitli.in/FTlcBeO" target="_blank"><img src="https://phoenixunited.s3.ap-south-1.amazonaws.com/BrandsImages/10072023164735895_brlo.png"><div>Biba</div><span class="affiliate-btn">Women's Wear</span></a></div>
+  <div class="affiliate-item"><a href="https://bitli.in/R1K4mbU" target="_blank"><img src="https://i.pinimg.com/736x/f5/16/62/f516628c03149b5275787b56e392663c.jpg"><div>Mamaearth</div><span class="affiliate-btn">Beauty Care</span></a></div>
+  <div class="affiliate-item"><a href="https://bitli.in/cEpJHPX" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/0/0d/NeuroGum_Company_Logo.jpg"><div>NeuroGum</div><span class="affiliate-btn">Boost Focus</span></a></div>
+  <div class="affiliate-item"><a href="https://bitli.in/JcPojrB" target="_blank"><img src="https://houseofkoala.com/cdn/shop/files/Logo-_HOK.png"><div>House of Koala</div><span class="affiliate-btn">Shop Koala</span></a></div>
+  <div class="affiliate-item"><a href="https://rzekl.com/g/pm1aev55cl489fc44418219aa26f6f" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/fr/3/3b/Logo-alibaba-group.jpg"><div>Alibaba</div><span class="affiliate-btn">Global Deals</span></a></div>
+  <div class="affiliate-item"><a href="https://rzekl.com/g/1e8d114494489fc4441816525dc3e8" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Aliexpress_logo.svg"><div>AliExpress</div><span class="affiliate-btn">Shop Global</span></a></div>
+  <div class="affiliate-item"><a href="https://rzekl.com/g/pzwp2neyhy489fc444186a95c12d58" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/fr/f/f8/DHgate_%28logo%29.svg"><div>DHgate</div><span class="affiliate-btn">Wholesale Deals</span></a></div>
+  <div class="affiliate-item"><a href="https://dorinebeaumont.com/g/7npkd4cs1i489fc44418869a299fda" target="_blank"><img src="https://consumersiteimages.trustpilot.net/business-units/4bdec040000064000506b5c2-198x149-1x.jpg"><div>Sunsky</div><span class="affiliate-btn">Electronics Deals</span></a></div>
+  <div class="affiliate-item"><a href="https://bywiola.com/g/78tuvzaw8k489fc444180267b86f6e" target="_blank"><img src="https://s3-eu-west-1.amazonaws.com/tpd/logos/5060aec200006400051bf6d2/0x0.png"><div>Geekbuying</div><span class="affiliate-btn">Gadget Offers</span></a></div>
+</div></body>
 </html>
-    
